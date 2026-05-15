@@ -8,6 +8,16 @@
  * LEGACY CODE: These global functions remain for compatibility with inline onclick handlers
  */
 
+// Ensure theme API is available on pages that include only script.js
+(function(){
+  if (!window.ThemeAPI) {
+    const s = document.createElement('script');
+    s.src = '/js/theme-api.js';
+    s.defer = true;
+    document.head.appendChild(s);
+  }
+})();
+
 // =====================================================================
 // LEGACY GLOBAL FUNCTIONS (BACKWARD COMPATIBILITY)
 // =====================================================================
