@@ -193,14 +193,25 @@
   }
 
   // Export / copy button
-  function copyPlaygroundCode() {
+  async function copyPlaygroundCode() {
     try {
       const text = code.textContent || '';
-      if (!navigator.clipboard) {
-        const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
+      
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(text);
       } else {
-        navigator.clipboard.writeText(text);
+        // Fallback for older browsers
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        const success = document.execCommand('copy');
+        document.body.removeChild(ta);
+        if (!success) throw new Error('Fallback copy failed');
       }
+      
       if (typeof showToastSafe === 'function') showToastSafe('Playground code copied ✓');
     } catch (e) {
       console.error('copyPlaygroundCode', e);
