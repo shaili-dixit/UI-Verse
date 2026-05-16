@@ -707,6 +707,233 @@
 </footer>
 
 <script>
+  /* ================= DARK MODE ================= */
+  const toggle = document.getElementById("darkModeToggle");
+  const icon = toggle.querySelector("i");
+
+  function applyTheme(theme) {
+    if (theme === "dark") {
+      document.body.classList.add("dark-mode");
+      icon.className = "fa-solid fa-sun";
+    } else {
+      document.body.classList.remove("dark-mode");
+      icon.className = "fa-solid fa-moon";
+    }
+  }
+
+  const savedTheme = localStorage.getItem("theme") || "light";
+  applyTheme(savedTheme);
+
+  toggle.addEventListener("click", () => {
+    const isDark = document.body.classList.toggle("dark-mode");
+    const theme = isDark ? "dark" : "light";
+
+    icon.className = isDark
+      ? "fa-solid fa-sun"
+      : "fa-solid fa-moon";
+
+    localStorage.setItem("theme", theme);
+  });
+
+  /* ================= SIDEBAR ================= */
+  function toggleSidebar() {
+    document.getElementById("sidebar").classList.toggle("open");
+    document
+      .getElementById("sidebarBackdrop")
+      .classList.toggle("visible");
+  }
+
+  /* Close sidebar on outside click */
+  document.getElementById("sidebarBackdrop")
+    .addEventListener("click", toggleSidebar);
+
+  /* ================= SCROLL ================= */
+  function scrollToTop() {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  }
+
+  window.addEventListener("scroll", () => {
+    const scrollBtn = document.getElementById("scrollTopBtn");
+    const navbar = document.getElementById("navbar");
+
+    scrollBtn.classList.toggle(
+      "visible",
+      window.scrollY > 400
+    );
+
+    navbar.classList.toggle(
+      "scrolled",
+      window.scrollY > 40
+    );
+  });
+
+  /* ================= COPY FUNCTION ================= */
+  let toastTimer;
+
+  async function copyText(text, btn) {
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.style.position = "fixed";
+        textarea.style.left = "-999999px";
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+        document.execCommand("copy");
+        textarea.remove();
+      }
+
+      showToast("Copied: " + text);
+
+      if (btn) {
+        const original = btn.innerHTML;
+
+        btn.innerHTML =
+          '<i class="fa-solid fa-check"></i>';
+
+        btn.disabled = true;
+
+        setTimeout(() => {
+          btn.innerHTML = original;
+          btn.disabled = false;
+        }, 1500);
+      }
+
+    } catch (err) {
+      console.error("Copy failed:", err);
+      showToast("Copy failed");
+    }
+  }
+
+  function showToast(message) {
+    const toast = document.getElementById("copyToast");
+
+    toast.innerHTML =
+      `<i class="fa-solid fa-check"></i> ${message}`;
+
+    toast.classList.add("show");
+
+    clearTimeout(toastTimer);
+
+    toastTimer = setTimeout(() => {
+      toast.classList.remove("show");
+    }, 1800);
+  }
+
+  /* ================= FILTER SECTION ================= */
+  function filterSection(section, btn) {
+    document
+      .querySelectorAll(".filter-btn")
+      .forEach(b => b.classList.remove("active"));
+
+    btn.classList.add("active");
+
+    document
+      .querySelectorAll(".color-section")
+      .forEach(sec => {
+        sec.style.display =
+          section === "all" ||
+          sec.dataset.section === section
+            ? "block"
+            : "none";
+      });
+  }
+
+  /* ================= LIVE SEARCH ================= */
+  function liveFilter(value) {
+    const query = value.trim().toLowerCase();
+
+    const cards = document.querySelectorAll(`
+      .color-card,
+      .gradient-card,
+      .palette-card,
+      .themed-card
+    `);
+
+    let visibleCount = 0;
+
+    cards.forEach(card => {
+      const name =
+        card.dataset.name?.toLowerCase() || "";
+
+      const matched = name.includes(query);
+
+      card.style.display = matched ? "" : "none";
+
+      if (matched) visibleCount++;
+    });
+
+    /* Auto-show all sections during search */
+    document.querySelectorAll(".color-section")
+      .forEach(section => {
+        const visibleCards =
+          section.querySelectorAll(
+            '.color-card:not([style*="display: none"]), \
+             .gradient-card:not([style*="display: none"]), \
+             .palette-card:not([style*="display: none"]), \
+             .themed-card:not([style*="display: none"])'
+          );
+
+        section.style.display =
+          visibleCards.length > 0 ? "" : "none";
+      });
+
+    /* Empty state */
+    let empty = document.getElementById("emptySearch");
+
+    if (!empty) {
+      empty = document.createElement("div");
+      empty.id = "emptySearch";
+      empty.className = "empty-search";
+      empty.innerHTML = `
+        <i class="fa-solid fa-face-frown"></i>
+        <h3>No colors found</h3>
+        <p>Try another keyword.</p>
+      `;
+
+      document.querySelector(".main-home")
+        .appendChild(empty);
+    }
+
+    empty.style.display =
+      visibleCount === 0 ? "flex" : "none";
+  }
+
+  /* ================= INTERSECTION ANIMATION ================= */
+  const observer = new IntersectionObserver(
+    entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("in-view");
+        }
+      });
+    },
+    {
+      threshold: 0.08
+    }
+  );
+
+  document
+    .querySelectorAll(
+      ".color-card, .gradient-card, .palette-card, .themed-card"
+    )
+    .forEach(el => observer.observe(el));
+
+  /* ================= ACCESSIBILITY ================= */
+  document.querySelectorAll("button").forEach(btn => {
+    if (!btn.getAttribute("aria-label")) {
+      btn.setAttribute(
+        "aria-label",
+        btn.innerText.trim() || "button"
+      );
+    }
+  });
   /* Dark Mode */
   const toggle = document.getElementById('darkModeToggle');
   const icon = toggle.querySelector('i');
