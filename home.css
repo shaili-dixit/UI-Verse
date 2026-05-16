@@ -3,27 +3,6 @@
    Import AFTER style.css
    =================================================== */
 
-/* ---------- SKIP TO CONTENT ---------- */
-.skip-link {
-  position: absolute;
-  top: -100%;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--accent);
-  color: #fff;
-  padding: 12px 24px;
-  border-radius: 0 0 8px 8px;
-  font-size: 14px;
-  font-weight: 600;
-  text-decoration: none;
-  z-index: 9999;
-  transition: top 0.2s;
-}
-
-.skip-link:focus {
-  top: 0;
-}
-
 /* ---------- ROOT TOKENS ---------- */
 :root {
   --accent: #eb6835;
@@ -50,30 +29,7 @@ body.dark-mode {
   --card-border: #2a2a30;
   --body-bg: #0f0f12;
   --text-primary: #f0f0f0;
-  --text-secondary: #a0a0a0;
-}
-
-/* Dark mode footer */
-body.dark-mode .footer {
-  background: #0a0a0d;
-}
-
-body.dark-mode .footer-col ul li a {
-  color: #888;
-}
-
-body.dark-mode .footer-col ul li a:hover {
-  color: var(--accent);
-}
-
-body.dark-mode .footer-bottom {
-  border-top-color: #1e1e24;
-  color: #666;
-}
-
-body.dark-mode .newsletter-form input {
-  background: #1e1e24;
-  border-color: #2a2a30;
+  --text-secondary: #999;
 }
 
 /* ---------- BASE RESET ---------- */
@@ -81,8 +37,10 @@ body.dark-mode .newsletter-form input {
   box-sizing: border-box;
 }
 
-html {
-  scroll-behavior: smooth;
+/* ---------- FOCUS VISIBLE ---------- */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 html, body {
@@ -196,16 +154,11 @@ h1, h2, h3 {
 .sidebar-footer a {
   color: #6a7a94;
   font-size: 16px;
-  transition: color var(--transition), transform var(--transition);
+  transition: color var(--transition);
 }
 
 .sidebar-footer a:hover {
   color: var(--accent);
-  transform: scale(1.15);
-}
-
-.sidebar-nav li a:active {
-  transform: translateX(3px) scale(0.98);
 }
 
 /* Sidebar backdrop (mobile) */
@@ -654,15 +607,7 @@ body.dark-mode .hero-stats {
 .feature-card.in-view {
   opacity: 1;
   transform: translateY(0);
-  transition: opacity 0.5s ease, transform 0.5s ease, box-shadow var(--transition), border-color var(--transition);
 }
-
-.feature-card:nth-child(1).in-view { transition-delay: 0.05s; }
-.feature-card:nth-child(2).in-view { transition-delay: 0.1s; }
-.feature-card:nth-child(3).in-view { transition-delay: 0.15s; }
-.feature-card:nth-child(4).in-view { transition-delay: 0.2s; }
-.feature-card:nth-child(5).in-view { transition-delay: 0.25s; }
-.feature-card:nth-child(6).in-view { transition-delay: 0.3s; }
 
 .feature-card:hover {
   transform: translateY(-6px);
@@ -763,17 +708,7 @@ body.dark-mode .feature-card:hover {
 .cat-card.in-view {
   opacity: 1;
   transform: translateY(0);
-  transition: opacity 0.5s ease, transform 0.5s ease, box-shadow var(--transition), border-color var(--transition);
 }
-
-.cat-card:nth-child(1).in-view { transition-delay: 0.05s; }
-.cat-card:nth-child(2).in-view { transition-delay: 0.1s; }
-.cat-card:nth-child(3).in-view { transition-delay: 0.15s; }
-.cat-card:nth-child(4).in-view { transition-delay: 0.2s; }
-.cat-card:nth-child(5).in-view { transition-delay: 0.25s; }
-.cat-card:nth-child(6).in-view { transition-delay: 0.3s; }
-.cat-card:nth-child(7).in-view { transition-delay: 0.35s; }
-.cat-card:nth-child(8).in-view { transition-delay: 0.4s; }
 
 .cat-card:hover {
   border-color: var(--accent);
@@ -834,15 +769,7 @@ body.dark-mode .feature-card:hover {
 .why-card.in-view {
   opacity: 1;
   transform: translateY(0);
-  transition: opacity 0.5s ease, transform 0.5s ease, box-shadow var(--transition), border-color var(--transition);
 }
-
-.why-card:nth-child(1).in-view { transition-delay: 0.05s; }
-.why-card:nth-child(2).in-view { transition-delay: 0.1s; }
-.why-card:nth-child(3).in-view { transition-delay: 0.15s; }
-.why-card:nth-child(4).in-view { transition-delay: 0.2s; }
-.why-card:nth-child(5).in-view { transition-delay: 0.25s; }
-.why-card:nth-child(6).in-view { transition-delay: 0.3s; }
 
 .why-card:hover {
   border-color: rgba(235,104,53,0.3);
