@@ -3,6 +3,7 @@
 <head>
   <title>My Collection</title>
   <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https:; base-uri 'self'; frame-ancestors 'none'; object-src 'none'; connect-src 'self' https:; img-src 'self' data: https:; font-src 'self' data: https:; script-src 'self' https: 'unsafe-hashes' sha256-Ct0viZJ2MHL+3zIYZmyWn37Rs8UvfMpfaeeCVk3C3tI= sha256-US2DsvAOjYo3YOWW6ekdI9aTm1cH7BcO4oFoLHMaUq8= sha256-v9W7KgiND3lksqeem6K4EU3GffiZPPYGVVSiXT0zNuU=; script-src-attr 'unsafe-hashes' sha256-Ct0viZJ2MHL+3zIYZmyWn37Rs8UvfMpfaeeCVk3C3tI= sha256-US2DsvAOjYo3YOWW6ekdI9aTm1cH7BcO4oFoLHMaUq8= sha256-v9W7KgiND3lksqeem6K4EU3GffiZPPYGVVSiXT0zNuU=; style-src 'self' https: 'unsafe-hashes' sha256-RyT2wnie6C+SHb0GleSBE/hAmSebXBQlPiVNu3ZPlDc= sha256-vvEHg6mWQeaw352vddJCmZcCgjXe9yXGVbgajITx4ME=; style-src-attr 'unsafe-hashes' sha256-RyT2wnie6C+SHb0GleSBE/hAmSebXBQlPiVNu3ZPlDc= sha256-vvEHg6mWQeaw352vddJCmZcCgjXe9yXGVbgajITx4ME=">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     * {
@@ -160,6 +161,7 @@
 
   <!-- UIverse Modular CSS Architecture -->
   <link rel="stylesheet" href="css/main.css">
+  <script src="js/core/sanitize.js"></script>
 </head>
 <body>
 
@@ -196,6 +198,16 @@ function showToast(message) {
   }, 2000);
 }
 
+function escapeHtml(str) {
+  if (str == null) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 function removeFromCollection(id) {
   let items = JSON.parse(localStorage.getItem("collection")) || [];
   items = items.filter(item => item.id !== id);
@@ -219,14 +231,16 @@ function renderCollection() {
     return;
   }
 
+  // Build sanitized HTML for the collection grid. Use sanitizeHTML() to avoid XSS
   let html = '<div class="collection-grid">';
   
   items.forEach(item => {
+    const safeContent = (typeof sanitizeHTML === 'function') ? sanitizeHTML(item.content) : '';
     html += `
       <div class="collection-item">
-        <div class="item-title">${item.title}</div>
+        <div class="item-title">${escapeHtml(item.title)}</div>
         <div class="item-preview">
-          ${item.content}
+          ${safeContent}
         </div>
         <div class="item-actions">
           <button class="btn-copy" onclick="copyCode(${item.id})">Copy Code</button>
@@ -244,9 +258,7 @@ function copyCode(id) {
   let items = JSON.parse(localStorage.getItem("collection")) || [];
   let item = items.find(i => i.id === id);
   if (item) {
-    let tempDiv = document.createElement('div');
-    tempDiv.innerHTML = item.content;
-    let text = tempDiv.innerText;
+    // Copy raw component HTML to clipboard (avoid assigning user HTML into DOM)
     navigator.clipboard.writeText(item.content);
     
     // Find the button and update it

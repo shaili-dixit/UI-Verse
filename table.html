@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https:; base-uri 'self'; frame-ancestors 'none'; object-src 'none'; connect-src 'self' https:; img-src 'self' data: https:; font-src 'self' data: https:; script-src 'self' https: 'unsafe-hashes' sha256-4idOpfcVGcf1JIcDr6s5pmLauAMO9auB0wLw0b1hd9Y= sha256-XriXHWKMwk2T+JOvuAt7cij0Iacl5D/SqRKl7ZgDNZ4= sha256-lu4c47NVm31gljYPDxVGrWs3uCKqNYvJ3gHLph2fUaA=; script-src-attr 'unsafe-hashes' sha256-4idOpfcVGcf1JIcDr6s5pmLauAMO9auB0wLw0b1hd9Y= sha256-XriXHWKMwk2T+JOvuAt7cij0Iacl5D/SqRKl7ZgDNZ4= sha256-lu4c47NVm31gljYPDxVGrWs3uCKqNYvJ3gHLph2fUaA=; style-src 'self' https: 'unsafe-hashes'; style-src-attr 'unsafe-hashes'">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Responsive Table UI</title>
   <link rel="stylesheet" href="table.css">
@@ -329,7 +330,22 @@
       <h3>Stay Updated</h3>
       <p>Get notified when new components drop.</p>
       <div class="newsletter-form">
-        <input type="email" placeholder="your@email.com" />
+        <input 
+  type="email"
+  placeholder="your@email.com"
+
+  style="
+    transition:0.3s ease;
+    padding:12px;
+    border-radius:8px;
+    border:none;
+    background:#1a1a1a;
+    color:white;
+  "
+
+  onmouseover="this.style.boxShadow='0 0 15px rgba(255,102,0,0.8)'"
+  onmouseout="this.style.boxShadow='none'"
+/>
         <button type="button" onclick="subscribe()">Subscribe</button>
       </div>
     </div>
