@@ -6,36 +6,90 @@
 const Theme = {
   _state: {
     initialized: false,
-    listener: null
+    listeners: new WeakMap()
   },
 
-  updateToggleState(themeToggle, isDark) {
-    if (!themeToggle) return;
+  _getToggleButtons() {
+    const buttons = Array.from(document.querySelectorAll('.theme-toggle, #darkModeToggle, #themeToggle'));
+    return Array.from(new Set(buttons));
+  },
 
-    themeToggle.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
-    themeToggle.setAttribute('title', isDark ? 'Switch to light mode' : 'Switch to dark mode');
-    themeToggle.setAttribute('aria-pressed', String(isDark));
+  _createToggleButton() {
+    const navRight = document.querySelector('.nav-right');
+    if (!navRight) return null;
 
-    const icon = themeToggle.querySelector('i');
-    if (icon) {
-      icon.className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'theme-toggle';
+    button.id = 'themeToggle';
+    button.setAttribute('aria-label', 'Switch to dark mode');
+    button.setAttribute('aria-pressed', 'false');
+    button.innerHTML = '<i class="fa-solid fa-moon"></i>';
+
+    const anchorButton = navRight.querySelector('.primary-nav-btn');
+    if (anchorButton && anchorButton.nextSibling) {
+      navRight.insertBefore(button, anchorButton.nextSibling);
+    } else {
+      navRight.appendChild(button);
     }
+
+    return button;
+  },
+
+  _ensureToggleButtons() {
+    const toggles = this._getToggleButtons();
+    if (toggles.length > 0) return toggles;
+
+    const injected = this._createToggleButton();
+    return injected ? [injected] : [];
+  },
+
+  updateToggleState(themeToggles, isDark) {
+    const buttons = Array.isArray(themeToggles) ? themeToggles : [themeToggles].filter(Boolean);
+
+    buttons.forEach((themeToggle) => {
+      themeToggle.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+      themeToggle.setAttribute('title', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+      themeToggle.setAttribute('aria-pressed', String(isDark));
+
+      const icon = themeToggle.querySelector('i');
+      if (icon) {
+        icon.className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+      }
+    });
+  },
+
+  _applyTheme(isDark) {
+    document.body.classList.toggle('dark-mode', isDark);
+    document.documentElement.dataset.theme = isDark ? 'dark' : 'light';
+    document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
+
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    this.updateToggleState(this._getToggleButtons(), isDark);
+  },
+
+  _syncThemeFromStorage() {
+    const saved = localStorage.getItem('theme');
+
+    if (saved === 'dark') {
+      this._applyTheme(true);
+      return;
+    }
+
+    if (saved === 'light') {
+      this._applyTheme(false);
+      return;
+    }
+
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    this._applyTheme(prefersDark);
   },
 
   /**
    * Load and apply saved theme
    */
   load() {
-    const themeToggle = getElement("theme-toggle") || getElement("darkModeToggle");
-    const saved = localStorage.getItem("theme");
-
-    if (saved === "dark") {
-      document.body.classList.add("dark-mode");
-      this.updateToggleState(themeToggle, true);
-    } else {
-      document.body.classList.remove("dark-mode");
-      this.updateToggleState(themeToggle, false);
-    }
+    this._syncThemeFromStorage();
   },
 
   /**
@@ -44,42 +98,35 @@ const Theme = {
   init() {
     if (this._state.initialized) return;
 
-    // Apply system preference on first visit
-    if (!localStorage.getItem("theme")) {
-      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-        document.body.classList.add("dark-mode");
-      }
-    }
-
+    const themeToggles = this._ensureToggleButtons();
     this.load();
 
-    const themeToggle = getElement("theme-toggle") || getElement("darkModeToggle");
-    if (themeToggle) {
-      if (this._state.listener) {
-        themeToggle.removeEventListener("click", this._state.listener);
-      }
+    themeToggles.forEach((themeToggle) => {
+      if (this._state.listeners.has(themeToggle)) return;
 
-      const onClick = () => {
-        document.body.classList.toggle("dark-mode");
-        const isDark = document.body.classList.contains("dark-mode");
-        localStorage.setItem("theme", isDark ? "dark" : "light");
-
-        this.updateToggleState(themeToggle, isDark);
+      const onClick = (event) => {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        const isDark = !document.body.classList.contains('dark-mode');
+        this._applyTheme(isDark);
       };
 
-      themeToggle.addEventListener("click", onClick);
-      this._state.listener = onClick;
-    }
+      themeToggle.addEventListener('click', onClick, true);
+      this._state.listeners.set(themeToggle, onClick);
+    });
 
     this._state.initialized = true;
   },
 
   destroy() {
-    const themeToggle = getElement("theme-toggle") || getElement("darkModeToggle");
-    if (themeToggle && this._state.listener) {
-      themeToggle.removeEventListener("click", this._state.listener);
-    }
-    this._state.listener = null;
+    this._getToggleButtons().forEach((themeToggle) => {
+      const listener = this._state.listeners.get(themeToggle);
+      if (listener) {
+        themeToggle.removeEventListener('click', listener, true);
+      }
+    });
+
+    this._state.listeners = new WeakMap();
     this._state.initialized = false;
   }
 };

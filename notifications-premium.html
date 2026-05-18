@@ -480,6 +480,348 @@
 }</code></pre>
     </div>
 
+    <!-- ============ 6: STACKED NOTIFICATION CENTER ============ -->
+    <div class="component-card" data-category="cards">
+      <div class="card-preview dark-preview">
+        <div class="card-interactive-area full-width">
+          <div class="premium-stacked-center" id="stackedCenter">
+            <div class="stacked-header">
+              <span class="stacked-title">Notification Stack</span>
+              <span class="stacked-badge" id="stackedBadge">3 New</span>
+            </div>
+            
+            <div class="stacked-cards-container" id="stackedContainer">
+              <!-- Card 1 (Top / Front) -->
+              <div class="stacked-card-item card-top-item" data-index="0">
+                <div class="item-avatar orange"><i class="fa-solid fa-fire"></i></div>
+                <div class="item-body">
+                  <strong>High CPU Alert</strong>
+                  <span>Instance-12 is running at 98% load capacity.</span>
+                </div>
+                <button class="stacked-dismiss" onclick="dismissStackedItem(0, event)">&times;</button>
+              </div>
+              
+              <!-- Card 2 -->
+              <div class="stacked-card-item card-middle-item" data-index="1">
+                <div class="item-avatar purple"><i class="fa-solid fa-code-merge"></i></div>
+                <div class="item-body">
+                  <strong>PR Approved</strong>
+                  <span>Pull request #324 has been merged into main.</span>
+                </div>
+                <button class="stacked-dismiss" onclick="dismissStackedItem(1, event)">&times;</button>
+              </div>
+              
+              <!-- Card 3 -->
+              <div class="stacked-card-item card-bottom-item" data-index="2">
+                <div class="item-avatar green"><i class="fa-solid fa-circle-check"></i></div>
+                <div class="item-body">
+                  <strong>Deploy Successful</strong>
+                  <span>Production environment updated, all health-checks passed.</span>
+                </div>
+                <button class="stacked-dismiss" onclick="dismissStackedItem(2, event)">&times;</button>
+              </div>
+            </div>
+            
+            <div class="stacked-footer">
+              <button class="stacked-action-btn primary" onclick="toggleNotificationStack()">Expand Stack</button>
+              <button class="stacked-action-btn secondary" onclick="resetStackedCenter()">Reset</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="card-top">
+          <h3>Stacked Center</h3>
+          <span>Interactive Stacking</span>
+        </div>
+        <p>A space-saving pile of notifications that spreads dynamically into a detailed vertical list with staggered transitions on hover or click.</p>
+        <div class="card-actions">
+          <button onclick="toggleCode('nt6')"><i class="fa-solid fa-code"></i> View Code</button>
+          <button onclick="copyCode('nt6')"><i class="fa-solid fa-copy"></i> Copy</button>
+          <button onclick="toggleNotificationStack()"><i class="fa-solid fa-expand"></i> Toggle Expand</button>
+        </div>
+      </div>
+      <pre id="nt6" class="code-block" style="display:none;"><code>&lt;!-- HTML --&gt;
+&lt;div class="premium-stacked-center"&gt;
+  &lt;div class="stacked-header"&gt;
+    &lt;span class="stacked-title"&gt;Notification Stack&lt;/span&gt;
+    &lt;span class="stacked-badge"&gt;3 New&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class="stacked-cards-container"&gt;
+    &lt;div class="stacked-card-item card-top-item"&gt;...&lt;/div&gt;
+    &lt;div class="stacked-card-item card-middle-item"&gt;...&lt;/div&gt;
+    &lt;div class="stacked-card-item card-bottom-item"&gt;...&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <!-- ============ 7: LIVE ACTIVITY FEED CARD ============ -->
+    <div class="component-card" data-category="cards">
+      <div class="card-preview dark-preview">
+        <div class="card-interactive-area full-width">
+          <div class="premium-activity-feed">
+            <div class="feed-header">
+              <span class="feed-title"><i class="fa-solid fa-wave-square pulse-icon"></i> System Activity</span>
+              <span class="feed-status">Real-time</span>
+            </div>
+            
+            <div class="feed-timeline">
+              <div class="timeline-line"></div>
+              
+              <!-- Feed Item 1 -->
+              <div class="feed-item" onclick="triggerFeedAlert('Server Node Alpha online')">
+                <div class="feed-marker pulse-green"></div>
+                <div class="feed-avatar"><img src="https://i.pravatar.cc/100?img=33" alt="User"></div>
+                <div class="feed-content">
+                  <span class="feed-user">Marcus V.</span>
+                  <span class="feed-text">launched server <strong>Node Alpha</strong> in us-east-1</span>
+                  <span class="feed-time">Just now</span>
+                </div>
+              </div>
+              
+              <!-- Feed Item 2 -->
+              <div class="feed-item" onclick="triggerFeedAlert('User avatar upload Completed')">
+                <div class="feed-marker pulse-orange"></div>
+                <div class="feed-avatar"><img src="https://i.pravatar.cc/100?img=12" alt="User"></div>
+                <div class="feed-content">
+                  <span class="feed-user">Sarah Connor</span>
+                  <span class="feed-text">uploaded a new 2.5MB high-res profile avatar</span>
+                  <span class="feed-time">10 min ago</span>
+                </div>
+              </div>
+              
+              <!-- Feed Item 3 -->
+              <div class="feed-item" onclick="triggerFeedAlert('Database backup Successful')">
+                <div class="feed-marker pulse-purple"></div>
+                <div class="feed-avatar"><div class="avatar-fallback"><i class="fa-solid fa-database"></i></div></div>
+                <div class="feed-content">
+                  <span class="feed-user">System Backup</span>
+                  <span class="feed-text">successfully exported database logs to AWS S3 bucket</span>
+                  <span class="feed-time">1 hour ago</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="card-top">
+          <h3>Activity Feed</h3>
+          <span>Dynamic Feed Timeline</span>
+        </div>
+        <p>A chronological, high-fidelity activity dashboard with glowing node pulses, active connecting timelines, and micro-hover transformations.</p>
+        <div class="card-actions">
+          <button onclick="toggleCode('nt7')"><i class="fa-solid fa-code"></i> View Code</button>
+          <button onclick="copyCode('nt7')"><i class="fa-solid fa-copy"></i> Copy</button>
+          <button onclick="triggerToastDemo('info', 'Listening for live events...')"><i class="fa-solid fa-radio"></i> Live Listen</button>
+        </div>
+      </div>
+      <pre id="nt7" class="code-block" style="display:none;"><code>&lt;!-- HTML --&gt;
+&lt;div class="premium-activity-feed"&gt;
+  &lt;div class="feed-timeline"&gt;
+    &lt;div class="timeline-line"&gt;&lt;/div&gt;
+    &lt;div class="feed-item"&gt;
+      &lt;div class="feed-marker pulse-green"&gt;&lt;/div&gt;
+      &lt;div class="feed-avatar"&gt;...&lt;/div&gt;
+      &lt;div class="feed-content"&gt;...&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <!-- ============ 8: EXPANDABLE SYSTEM ALERT ============ -->
+    <div class="component-card" data-category="alerts">
+      <div class="card-preview dark-preview">
+        <div class="card-interactive-area full-width">
+          <div class="premium-system-alert danger" id="systemAlert">
+            <div class="alert-banner" onclick="toggleDiagnosticAlert()">
+              <div class="alert-icon-wrap">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+              </div>
+              <div class="alert-brief">
+                <strong>CRITICAL: Database connection pool exhausted</strong>
+                <span>Timeout error occurred on thread pool #4592.</span>
+              </div>
+              <button class="alert-toggle-btn" id="alertChevron">
+                <i class="fa-solid fa-chevron-down"></i>
+              </button>
+            </div>
+            
+            <div class="alert-collapsible-wrapper" id="alertCollapsible">
+              <div class="alert-details-content">
+                <div class="detail-section">
+                  <h5>Error Diagnostics</h5>
+                  <pre class="diagnostic-code"><code>java.sql.SQLTransientConnectionException: HikariPool-1
+  at com.zaxxer.hikari.pool.HikariPool.getConnection(HikariPool.java:218)
+  at org.hibernate.engine.jdbc.connections.internal.DatasourceConnectionProviderImpl
+  at threadpool.executor.Worker.run(Worker.java:62)</code></pre>
+                </div>
+                <div class="detail-actions">
+                  <button class="alert-action-btn copy" onclick="copyLogsToClipboard(event)"><i class="fa-solid fa-copy"></i> Copy Logs</button>
+                  <button class="alert-action-btn resolve" onclick="triggerToastDemo('success', 'Connection pool cleared. Diagnostic monitoring active.')"><i class="fa-solid fa-wrench"></i> Auto-Resolve</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="card-top">
+          <h3>Expandable Alert</h3>
+          <span>Interactive Crash Logs</span>
+        </div>
+        <p>A collapsing error banner showing simple warnings that slides open to reveal detailed raw telemetry log dumps and debugging utilities.</p>
+        <div class="card-actions">
+          <button onclick="toggleCode('nt8')"><i class="fa-solid fa-code"></i> View Code</button>
+          <button onclick="copyCode('nt8')"><i class="fa-solid fa-copy"></i> Copy</button>
+          <button onclick="toggleDiagnosticAlert()"><i class="fa-solid fa-arrow-down-up-lock"></i> Toggle Details</button>
+        </div>
+      </div>
+      <pre id="nt8" class="code-block" style="display:none;"><code>&lt;!-- HTML --&gt;
+&lt;div class="premium-system-alert danger"&gt;
+  &lt;div class="alert-banner" onclick="toggleDiagnosticAlert()"&gt;
+    &lt;div class="alert-icon-wrap"&gt;&lt;i class="fa-solid fa-triangle-exclamation"&gt;&lt;/i&gt;&lt;/div&gt;
+    &lt;div class="alert-brief"&gt;...&lt;/div&gt;
+    &lt;button class="alert-toggle-btn"&gt;&lt;i class="fa-solid fa-chevron-down"&gt;&lt;/i&gt;&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;div class="alert-collapsible-wrapper"&gt;
+    &lt;div class="alert-details-content"&gt;...&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <!-- ============ 9: PROGRESS UPLOAD NOTIFICATION ============ -->
+    <div class="component-card" data-category="toasts">
+      <div class="card-preview dark-preview">
+        <div class="card-interactive-area full-width">
+          <div class="premium-progress-upload" id="progressUploadCard">
+            <div class="upload-header">
+              <div class="upload-icon-box" id="uploadStatusIcon">
+                <i class="fa-solid fa-file-arrow-up float-anim"></i>
+              </div>
+              <div class="upload-title-area">
+                <strong id="uploadFileName">video_rendering_v2.mp4</strong>
+                <span id="uploadFileSize">84.2 MB · Uploading</span>
+              </div>
+              <button class="upload-close" onclick="cancelUploadSimulation()">&times;</button>
+            </div>
+            
+            <div class="upload-progress-section">
+              <div class="upload-progress-bar-track">
+                <div class="upload-progress-fill" id="uploadBarFill" style="width: 0%;"></div>
+              </div>
+              <div class="upload-progress-meta">
+                <span id="uploadPercentage">0%</span>
+                <span id="uploadEta">Est: 14s remaining</span>
+              </div>
+            </div>
+            
+            <div class="upload-actions">
+              <button class="upload-action-btn pause" id="uploadPauseBtn" onclick="toggleUploadPause()">Pause</button>
+              <button class="upload-action-btn cancel" onclick="cancelUploadSimulation()">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="card-top">
+          <h3>Progress Upload</h3>
+          <span>Interactive Progress</span>
+        </div>
+        <p>A clean live-to-browser asset loading indicator featuring simulated background transfers, pausing, and status checks.</p>
+        <div class="card-actions">
+          <button onclick="toggleCode('nt9')"><i class="fa-solid fa-code"></i> View Code</button>
+          <button onclick="copyCode('nt9')"><i class="fa-solid fa-copy"></i> Copy</button>
+          <button onclick="startUploadSimulation()"><i class="fa-solid fa-play"></i> Run Upload</button>
+        </div>
+      </div>
+      <pre id="nt9" class="code-block" style="display:none;"><code>&lt;!-- HTML --&gt;
+&lt;div class="premium-progress-upload"&gt;
+  &lt;div class="upload-header"&gt;
+    &lt;div class="upload-icon-box"&gt;&lt;i class="fa-solid fa-file-arrow-up"&gt;&lt;/i&gt;&lt;/div&gt;
+    &lt;div class="upload-title-area"&gt;...&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="upload-progress-section"&gt;
+    &lt;div class="upload-progress-bar-track"&gt;
+      &lt;div class="upload-progress-fill" style="width: 0%;"&gt;&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <!-- ============ 10: INTERACTIVE CHAT NOTIFICATION BUBBLE ============ -->
+    <div class="component-card" data-category="glass">
+      <div class="card-preview dark-preview">
+        <div class="card-interactive-area full-width" style="min-height: 280px; display:flex; justify-content:center; align-items:center;">
+          <div class="premium-chat-bubble-container">
+            <!-- Floating Bubble Trigger -->
+            <div class="chat-bubble-trigger" id="chatBubbleTrigger" onclick="toggleChatBubbleWindow()">
+              <img src="https://i.pravatar.cc/100?img=47" alt="Support Avatar" class="bubble-avatar">
+              <span class="chat-unread-badge" id="chatUnreadCount">2</span>
+              <div class="bubble-ripple"></div>
+            </div>
+            
+            <!-- Chat Popover Window -->
+            <div class="chat-popover-window" id="chatPopoverWindow">
+              <div class="chat-window-header">
+                <div class="header-user-info">
+                  <div class="header-avatar-status">
+                    <img src="https://i.pravatar.cc/100?img=47" alt="Support">
+                    <span class="online-indicator"></span>
+                  </div>
+                  <div class="header-text">
+                    <h4>Clara Jenkins</h4>
+                    <span>Customer Success Lead</span>
+                  </div>
+                </div>
+                <button class="chat-header-close" onclick="toggleChatBubbleWindow()">&times;</button>
+              </div>
+              
+              <div class="chat-messages-body" id="chatMessagesBody">
+                <div class="msg-bubble incoming">
+                  Hi there! We saw you exploring the UI-Verse catalog. Let us know if you need custom mockups!
+                  <span class="msg-time">2 min ago</span>
+                </div>
+                <div class="msg-bubble incoming">
+                  What sort of dashboard design are you currently engineering?
+                  <span class="msg-time">Just now</span>
+                </div>
+              </div>
+              
+              <div class="chat-input-footer">
+                <input type="text" id="chatBubbleInput" placeholder="Type a message..." onkeydown="handleChatBubbleInput(event)" />
+                <button class="chat-send-btn" onclick="sendChatBubbleMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="card-top">
+          <h3>Chat Bubble</h3>
+          <span>Interactive Chat Window</span>
+        </div>
+        <p>A floating message bubble with real-time unread counts that transitions smoothly into a glassmorphic chat thread with keyboard message insertion.</p>
+        <div class="card-actions">
+          <button onclick="toggleCode('nt10')"><i class="fa-solid fa-code"></i> View Code</button>
+          <button onclick="copyCode('nt10')"><i class="fa-solid fa-copy"></i> Copy</button>
+          <button onclick="toggleChatBubbleWindow()"><i class="fa-solid fa-message"></i> Open Thread</button>
+        </div>
+      </div>
+      <pre id="nt10" class="code-block" style="display:none;"><code>&lt;!-- HTML --&gt;
+&lt;div class="premium-chat-bubble-container"&gt;
+  &lt;div class="chat-bubble-trigger" onclick="toggleChatBubbleWindow()"&gt;
+    &lt;img src="avatar.png" class="bubble-avatar"&gt;
+    &lt;span class="chat-unread-badge"&gt;2&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class="chat-popover-window"&gt;
+    &lt;div class="chat-window-header"&gt;...&lt;/div&gt;
+    &lt;div class="chat-messages-body"&gt;...&lt;/div&gt;
+    &lt;div class="chat-input-footer"&gt;...&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+
   </section>
 
 </div>
@@ -789,6 +1131,258 @@ function pulseGlassGlow() {
   }
 }
 
+// 10. Stacked Notification Center Logic
+let stackedDismissedCount = 0;
+function toggleNotificationStack() {
+  const center = document.getElementById('stackedCenter');
+  if (center) {
+    center.classList.toggle('expanded');
+    const isExpanded = center.classList.contains('expanded');
+    const btn = center.querySelector('.stacked-action-btn.primary');
+    if (btn) btn.innerText = isExpanded ? 'Collapse Stack' : 'Expand Stack';
+    triggerToastDemo('info', isExpanded ? 'Notification stack expanded.' : 'Notification stack collapsed.');
+  }
+}
+
+function dismissStackedItem(index, event) {
+  if (event) event.stopPropagation();
+  const items = document.querySelectorAll('#stackedContainer .stacked-card-item');
+  items.forEach(item => {
+    if (parseInt(item.getAttribute('data-index')) === index) {
+      item.style.opacity = '0';
+      item.style.transform = 'translateX(100px)';
+      setTimeout(() => {
+        item.style.display = 'none';
+        stackedDismissedCount++;
+        const badge = document.getElementById('stackedBadge');
+        if (badge) {
+          const remaining = Math.max(0, 3 - stackedDismissedCount);
+          badge.innerText = remaining > 0 ? `${remaining} New` : 'Cleared';
+          if (remaining === 0) {
+            badge.style.background = 'rgba(255, 255, 255, 0.1)';
+            badge.style.color = '#8a9bc0';
+          }
+        }
+        triggerToastDemo('success', 'Stacked notification dismissed.');
+      }, 300);
+    }
+  });
+}
+
+function resetStackedCenter() {
+  stackedDismissedCount = 0;
+  const badge = document.getElementById('stackedBadge');
+  if (badge) {
+    badge.innerText = '3 New';
+    badge.style.background = '';
+    badge.style.color = '';
+  }
+  const center = document.getElementById('stackedCenter');
+  if (center) center.classList.remove('expanded');
+  const primaryBtn = center ? center.querySelector('.stacked-action-btn.primary') : null;
+  if (primaryBtn) primaryBtn.innerText = 'Expand Stack';
+  
+  const items = document.querySelectorAll('#stackedContainer .stacked-card-item');
+  items.forEach(item => {
+    item.style.display = '';
+    item.style.opacity = '';
+    item.style.transform = '';
+  });
+  triggerToastDemo('success', 'Notification stack reset.');
+}
+
+// 11. Live Activity Feed Alerts
+function triggerFeedAlert(activity) {
+  triggerToastDemo('info', `Feed Event: ${activity}`);
+}
+
+// 12. Expandable System Alert Diagnostics
+function toggleDiagnosticAlert() {
+  const alertBox = document.getElementById('systemAlert');
+  const chevron = document.getElementById('alertChevron');
+  if (alertBox) {
+    alertBox.classList.toggle('expanded');
+    const isExpanded = alertBox.classList.contains('expanded');
+    if (chevron) {
+      chevron.style.transform = isExpanded ? 'rotate(180deg)' : 'rotate(0)';
+    }
+    triggerToastDemo('info', isExpanded ? 'Diagnostic crash log expanded.' : 'Diagnostic logs hidden.');
+  }
+}
+
+function copyLogsToClipboard(event) {
+  if (event) event.stopPropagation();
+  const codeBlock = document.querySelector('.diagnostic-code code');
+  if (codeBlock) {
+    navigator.clipboard.writeText(codeBlock.innerText).then(() => {
+      triggerToastDemo('success', 'Diagnostic stack trace copied!');
+    });
+  }
+}
+
+// 13. Progress Upload Simulation Logic
+let uploadInterval = null;
+let uploadPercent = 0;
+let uploadIsPaused = false;
+function startUploadSimulation() {
+  if (uploadInterval) clearInterval(uploadInterval);
+  uploadPercent = 0;
+  uploadIsPaused = false;
+  
+  const fill = document.getElementById('uploadBarFill');
+  const percentageText = document.getElementById('uploadPercentage');
+  const etaText = document.getElementById('uploadEta');
+  const pauseBtn = document.getElementById('uploadPauseBtn');
+  const statusIcon = document.getElementById('uploadStatusIcon');
+  
+  if (pauseBtn) {
+    pauseBtn.innerText = 'Pause';
+    pauseBtn.classList.remove('resume');
+  }
+  
+  if (statusIcon) {
+    statusIcon.innerHTML = '<i class="fa-solid fa-spinner fa-spin orange"></i>';
+  }
+  
+  triggerToastDemo('info', 'File upload initialized...');
+  
+  uploadInterval = setInterval(() => {
+    if (uploadIsPaused) return;
+    
+    uploadPercent += Math.floor(Math.random() * 8) + 4;
+    if (uploadPercent >= 100) {
+      uploadPercent = 100;
+      clearInterval(uploadInterval);
+      uploadInterval = null;
+      if (statusIcon) {
+        statusIcon.innerHTML = '<i class="fa-solid fa-circle-check green"></i>';
+      }
+      triggerToastDemo('success', 'Asset uploaded successfully!');
+    }
+    
+    if (fill) fill.style.width = `${uploadPercent}%`;
+    if (percentageText) percentageText.innerText = `${uploadPercent}%`;
+    if (etaText) {
+      const remainingSeconds = Math.max(0, Math.ceil((100 - uploadPercent) * 0.15));
+      etaText.innerText = uploadPercent === 100 ? 'Completed' : `Est: ${remainingSeconds}s remaining`;
+    }
+  }, 450);
+}
+
+function toggleUploadPause() {
+  const pauseBtn = document.getElementById('uploadPauseBtn');
+  if (!uploadInterval && uploadPercent === 0) {
+    startUploadSimulation();
+    return;
+  }
+  uploadIsPaused = !uploadIsPaused;
+  if (pauseBtn) {
+    pauseBtn.innerText = uploadIsPaused ? 'Resume' : 'Pause';
+    if (uploadIsPaused) {
+      pauseBtn.classList.add('resume');
+      triggerToastDemo('warning', 'Upload paused.');
+    } else {
+      pauseBtn.classList.remove('resume');
+      triggerToastDemo('info', 'Upload resumed.');
+    }
+  }
+}
+
+function cancelUploadSimulation() {
+  if (uploadInterval) {
+    clearInterval(uploadInterval);
+    uploadInterval = null;
+  }
+  uploadPercent = 0;
+  uploadIsPaused = false;
+  
+  const fill = document.getElementById('uploadBarFill');
+  const percentageText = document.getElementById('uploadPercentage');
+  const etaText = document.getElementById('uploadEta');
+  const statusIcon = document.getElementById('uploadStatusIcon');
+  const pauseBtn = document.getElementById('uploadPauseBtn');
+  
+  if (fill) fill.style.width = '0%';
+  if (percentageText) percentageText.innerText = '0%';
+  if (etaText) etaText.innerText = 'Est: --s remaining';
+  if (pauseBtn) {
+    pauseBtn.innerText = 'Pause';
+    pauseBtn.classList.remove('resume');
+  }
+  if (statusIcon) {
+    statusIcon.innerHTML = '<i class="fa-solid fa-file-arrow-up float-anim"></i>';
+  }
+  triggerToastDemo('error', 'Upload cancelled.');
+}
+
+// 14. Interactive Chat Bubble Logic
+function toggleChatBubbleWindow() {
+  const win = document.getElementById('chatPopoverWindow');
+  const badge = document.getElementById('chatUnreadCount');
+  if (win) {
+    win.classList.toggle('open');
+    const isOpen = win.classList.contains('open');
+    if (isOpen && badge) {
+      badge.style.display = 'none';
+    }
+    triggerToastDemo('info', isOpen ? 'Chat thread initialized.' : 'Chat thread closed.');
+  }
+}
+
+function sendChatBubbleMessage() {
+  const input = document.getElementById('chatBubbleInput');
+  const body = document.getElementById('chatMessagesBody');
+  if (!input || !input.value.trim() || !body) return;
+  
+  const text = input.value.trim();
+  input.value = '';
+  
+  // Append user message
+  const userMsg = document.createElement('div');
+  userMsg.className = 'msg-bubble outgoing';
+  userMsg.innerHTML = `${text}<span class="msg-time">Just now</span>`;
+  body.appendChild(userMsg);
+  body.scrollTop = body.scrollHeight;
+  
+  // Simulate Support Typing Response
+  setTimeout(() => {
+    const typingMsg = document.createElement('div');
+    typingMsg.className = 'msg-bubble incoming typing-indicator';
+    typingMsg.id = 'claraTyping';
+    typingMsg.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+    body.appendChild(typingMsg);
+    body.scrollTop = body.scrollHeight;
+    
+    setTimeout(() => {
+      const liveTyping = document.getElementById('claraTyping');
+      if (liveTyping) liveTyping.remove();
+      
+      const ClaraReplies = [
+        "That sounds incredible! Pure HTML and CSS keeps the rendering super-fast.",
+        "Excellent selection! Our team is focused on maximizing premium aesthetics.",
+        "That's fantastic. Let me know if you would like me to compile a custom zip showcase for your team!",
+        "Stunning decision. Don't forget to mark our repository as starred on GitHub!"
+      ];
+      const randomReply = ClaraReplies[Math.floor(Math.random() * ClaraReplies.length)];
+      
+      const supportMsg = document.createElement('div');
+      supportMsg.className = 'msg-bubble incoming';
+      supportMsg.innerHTML = `${randomReply}<span class="msg-time">Just now</span>`;
+      body.appendChild(supportMsg);
+      body.scrollTop = body.scrollHeight;
+      
+      // Corner Toast trigger
+      triggerToastDemo('success', 'New reply received from Clara Jenkins.');
+    }, 1500);
+  }, 800);
+}
+
+function handleChatBubbleInput(event) {
+  if (event.key === 'Enter') {
+    sendChatBubbleMessage();
+  }
+}
+
 // Test All Trigger Button
 function triggerAllShowcase() {
   triggerToastDemo('success', 'Showroom Live Testing Initialized.');
@@ -798,6 +1392,14 @@ function triggerAllShowcase() {
   setTimeout(() => {
     triggerToastDemo('error', 'All modules verified successfully.');
   }, 1200);
+  
+  // Trigger simulation actions for premium components
+  setTimeout(() => {
+    toggleNotificationStack();
+  }, 1600);
+  setTimeout(() => {
+    startUploadSimulation();
+  }, 2500);
 }
 </script>
 

@@ -179,6 +179,11 @@ body{
   color: #64748b;
 }
 
+.error-icon-code {
+  display: flex;
+  gap: 16px;
+}
+
 .component-preview {
   height: 300px; /* Taller for error screens */
   background: #0f172a;
@@ -746,5 +751,158 @@ body{
   0% { transform: translateY(0); filter: brightness(1); }
   50% { transform: translateY(-6px); filter: brightness(1.2); }
   100% { transform: translateY(0); filter: brightness(1); }
+}
+
+/* 11. 429 Too Many Requests */
+.err-429 {
+  background: linear-gradient(135deg, #1a1040 0%, #0f0a2e 100%) !important;
+  border: 1px solid rgba(99, 102, 241, 0.25) !important;
+  box-shadow: 0 8px 32px rgba(99, 102, 241, 0.1);
+}
+.err-429 .icon-wrap {
+  font-size: 46px;
+  color: #818cf8;
+  margin-bottom: 10px;
+  animation: throttle-shake 1.5s ease-in-out infinite;
+}
+.err-429 .error-code {
+  background: linear-gradient(90deg, #818cf8, #c084fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.err-429 .error-title { color: #e0e7ff; font-family: "Syne", sans-serif; font-weight: 700; }
+.err-429 .rate-badges {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.err-429 .badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: rgba(99, 102, 241, 0.12);
+  color: #a5b4fc;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+}
+.err-429 .badge.active {
+  background: rgba(129, 140, 248, 0.25);
+  color: #c7d2fe;
+  border-color: rgba(129, 140, 248, 0.4);
+}
+.err-429 .error-btn {
+  background: linear-gradient(135deg, #6366f1, #818cf8);
+  color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+.err-429 .error-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.45);
+}
+@keyframes throttle-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-4px); }
+  40% { transform: translateX(4px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(3px); }
+}
+
+/* 12. Location Access Denied */
+.err-location {
+  background: linear-gradient(135deg, #0d2318 0%, #071a10 100%) !important;
+  border: 1px solid rgba(34, 197, 94, 0.2) !important;
+  box-shadow: 0 8px 32px rgba(34, 197, 94, 0.08);
+}
+.err-location .icon-wrap {
+  font-size: 44px;
+  color: #4ade80;
+  margin-bottom: 12px;
+  animation: pin-drop 3s ease-in-out infinite;
+}
+.err-location .error-title { color: #bbf7d0; font-family: "Syne", sans-serif; font-weight: 700; }
+.err-location .coords {
+  font-size: 11px;
+  font-family: monospace;
+  color: #4ade80;
+  background: rgba(34, 197, 94, 0.08);
+  border: 1px solid rgba(34, 197, 94, 0.15);
+  border-radius: 6px;
+  padding: 6px 14px;
+  margin-bottom: 12px;
+  letter-spacing: 1.5px;
+}
+.err-location .coords span { color: #6b7280; }
+.err-location .error-btn {
+  background: transparent;
+  color: #4ade80;
+  border: 1px solid rgba(74, 222, 128, 0.4);
+  border-radius: 8px;
+}
+.err-location .error-btn:hover {
+  background: rgba(74, 222, 128, 0.1);
+  border-color: #4ade80;
+  transform: translateY(-2px);
+}
+@keyframes pin-drop {
+  0%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-10px); }
+  60% { transform: translateY(0); }
+  70% { transform: translateY(-4px); }
+  85% { transform: translateY(0); }
+}
+
+/* 13. 410 Link / Token Expired */
+.err-410 {
+  background: linear-gradient(135deg, #1c1407 0%, #130e04 100%) !important;
+  border: 1px solid rgba(251, 191, 36, 0.18) !important;
+  box-shadow: 0 8px 32px rgba(251, 191, 36, 0.06);
+}
+.err-410 .icon-wrap {
+  font-size: 44px;
+  color: #fbbf24;
+  margin-bottom: 10px;
+  animation: fade-flicker 4s ease-in-out infinite;
+}
+.err-410 .error-title { color: #fef3c7; font-family: "Syne", sans-serif; font-weight: 700; }
+.err-410 .token-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+.err-410 .token-seg {
+  height: 5px;
+  border-radius: 3px;
+  background: rgba(251, 191, 36, 0.15);
+}
+.err-410 .token-seg:nth-child(1) { width: 40px; }
+.err-410 .token-seg:nth-child(2) { width: 32px; background: rgba(251, 191, 36, 0.45); }
+.err-410 .token-seg:nth-child(3) { width: 22px; background: rgba(251, 191, 36, 0.08); }
+.err-410 .token-seg:nth-child(4) { width: 48px; }
+.err-410 .token-label {
+  font-size: 10px;
+  color: #78350f;
+  letter-spacing: 2px;
+  font-family: monospace;
+  margin-bottom: 12px;
+}
+.err-410 .error-btn {
+  background: rgba(251, 191, 36, 0.1);
+  color: #fbbf24;
+  border: 1px solid rgba(251, 191, 36, 0.25);
+  border-radius: 8px;
+}
+.err-410 .error-btn:hover {
+  background: rgba(251, 191, 36, 0.2);
+  color: #fef3c7;
+  transform: translateY(-2px);
+}
+@keyframes fade-flicker {
+  0%, 100% { opacity: 1; filter: brightness(1); }
+  35% { opacity: 0.5; filter: brightness(0.6); }
+  38% { opacity: 1; }
+  74% { opacity: 0.7; filter: brightness(0.7); }
+  77% { opacity: 1; }
 }
 

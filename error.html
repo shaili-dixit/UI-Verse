@@ -21,7 +21,7 @@
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-brand">
     <span class="brand-icon">⬡</span>
-    <span class="brand-text">UIverse</span>
+    <span class="brand-text">UIverse <span style="font-size: 9px; background: linear-gradient(135deg, #eb6835, #7b61ff); color: white; padding: 1px 6px; border-radius: 10px; font-weight: 800; margin-left: 4px; letter-spacing: 0.5px; vertical-align: middle; box-shadow: 0 0 8px rgba(235,104,53,0.3);">V2</span></span>
   </div>
 
           <nav class="sidebar-nav">
@@ -537,6 +537,87 @@
       </div>
       <div class="card-actions">
         <button class="copy-btn" data-target="preview-10">
+          <i class="fa-regular fa-copy"></i> <span>Copy Code</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 11. 429 TOO MANY REQUESTS -->
+    <div class="error-card">
+      <div class="error-info">
+        <h2>429 Too Many Requests</h2>
+        <p>Rate-limit screen with throttle animation and cooldown badges.</p>
+      </div>
+      <div class="component-preview" id="preview-11">
+        <div class="error-screen err-429">
+          <div class="error-icon-code">
+            <div class="icon-wrap"><i class="fa-solid fa-gauge-high"></i></div>
+            <div class="error-code" style="font-size:48px;">429</div>
+          </div>
+          <div class="error-title">Too Many Requests</div>
+          <div class="rate-badges">
+            <span class="badge active">Rate Limited</span>
+            <span class="badge">Cooldown Active</span>
+          </div>
+          <div class="error-desc">You've sent too many requests in a short time. Please wait a moment before trying again.</div>
+          <button class="error-btn"><i class="fa-solid fa-rotate-right"></i> Retry Later</button>
+        </div>
+      </div>
+      <div class="card-actions">
+        <button class="copy-btn" data-target="preview-11">
+          <i class="fa-regular fa-copy"></i> <span>Copy Code</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 12. LOCATION ACCESS DENIED -->
+    <div class="error-card">
+      <div class="error-info">
+        <h2>Location Access Denied</h2>
+        <p>Geo-permission blocked state with a redacted coordinates display.</p>
+      </div>
+      <div class="component-preview" id="preview-12">
+        <div class="error-screen err-location">
+          <div class="icon-wrap"><i class="fa-solid fa-location-dot"></i></div>
+          <div class="error-title">Location Access Denied</div>
+          <div class="coords"><span>LAT</span> ██.████  <span>LNG</span> ██.████</div>
+          <div class="error-desc">Your browser has blocked location access. Enable permissions to use location-based features.</div>
+          <button class="error-btn">Enable Location</button>
+        </div>
+      </div>
+      <div class="card-actions">
+        <button class="copy-btn" data-target="preview-12">
+          <i class="fa-regular fa-copy"></i> <span>Copy Code</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 13. 410 LINK / TOKEN EXPIRED -->
+    <div class="error-card">
+      <div class="error-info">
+        <h2>Link / Token Expired</h2>
+        <p>Amber-toned expiry page with a decaying token visualizer and flicker animation.</p>
+      </div>
+      <div class="component-preview" id="preview-13">
+        <div class="error-screen err-410">
+          <div class="error-icon-code">
+            <div class="icon-wrap"><i class="fa-solid fa-link-slash"></i></div>
+            <div class="error-code" style="font-size:48px; color:#92400e;">410</div>
+          </div>
+          <div class="error-title">Link Expired</div>
+          <div class="token-row">
+            <div class="token-seg"></div>
+            <div class="token-seg"></div>
+            <div class="token-seg gone"></div>
+            <div class="token-seg"></div>
+          </div>
+          <div class="token-label">TOKEN EXPIRED</div>
+          <div class="error-desc">This link is no longer valid. It may have expired or already been used.</div>
+          <button class="error-btn">Request New Link</button>
+        </div>
+      </div>
+      <div class="card-actions">
+        <button class="copy-btn" data-target="preview-13">
           <i class="fa-regular fa-copy"></i> <span>Copy Code</span>
         </button>
       </div>
