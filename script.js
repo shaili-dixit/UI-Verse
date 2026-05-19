@@ -315,6 +315,30 @@ function initDevicePreviewFeature() {
   document.body.appendChild(script);
 }
 
+function initKeyboardShortcutsFeature() {
+  const start = () => {
+    if (window.KeyboardShortcuts && typeof window.KeyboardShortcuts.init === 'function') {
+      window.KeyboardShortcuts.init();
+    }
+  };
+
+  if (window.KeyboardShortcuts && typeof window.KeyboardShortcuts.init === 'function') {
+    start();
+    return;
+  }
+
+  const existingScript = document.querySelector('script[src$="js/features/keyboard-shortcuts.js"]');
+  if (existingScript) {
+    existingScript.addEventListener('load', start, { once: true });
+    return;
+  }
+
+  const script = document.createElement('script');
+  script.src = 'js/features/keyboard-shortcuts.js';
+  script.onload = start;
+  document.body.appendChild(script);
+}
+
 function updateSidebarActiveLink() {
   const currentRoute = getNormalizedRoutePath();
 
@@ -628,6 +652,7 @@ window.addEventListener("DOMContentLoaded", () => {
   initLegacyCardFavorites();
   initLiveSandboxes();
   initDevicePreviewFeature();
+  initKeyboardShortcutsFeature();
   initDarkMode();
   initScrollTop();
   initProgressBar();

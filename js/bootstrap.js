@@ -94,6 +94,10 @@ const Bootstrap = {
       UIverse.register('DevicePreview', DevicePreview);
     }
 
+    if (typeof KeyboardShortcuts !== 'undefined') {
+      UIverse.register('KeyboardShortcuts', KeyboardShortcuts);
+    }
+
     if (typeof TutorialMode !== 'undefined') {
       UIverse.register('TutorialMode', TutorialMode);
     }
