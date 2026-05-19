@@ -18,27 +18,31 @@
   <link rel="stylesheet" href="span.css"> <!-- Base component styles -->
   <link rel="stylesheet" href="charts.css"> <!-- Chart specific styles -->
   <link rel="stylesheet" href="shared-sidebar.css">
+  <link rel="stylesheet" href="accessibility.css"> <!-- Accessibility improvements -->
 </head>
 <body class="dark-mode">
 
+<!-- Skip to main content link -->
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
 <!-- ================= SIDEBAR ================= -->
-<aside class="sidebar" id="sidebar">
+<aside class="sidebar" id="sidebar" aria-label="Main navigation">
   <div class="sidebar-brand">
     <span class="brand-icon">⬡</span>
     <span class="brand-text">UIverse</span>
   </div>
 
-      <nav class="sidebar-nav">
-    <ul>
-      <li>
-        <a href="index.html">
-          <i class="fa-solid fa-house"></i>
+      <nav class="sidebar-nav" aria-label="Component categories">
+    <ul role="list">
+      <li role="listitem">
+        <a href="index.html" aria-current="page" aria-label="Home - Go to home page">
+          <i class="fa-solid fa-house" aria-hidden="true"></i>
           <span>Home</span>
         </a>
       </li>
-      <li>
-        <a href="button.html">
-          <i class="fa-solid fa-hand-pointer"></i>
+      <li role="listitem">
+        <a href="button.html" aria-label="Buttons - View button components">
+          <i class="fa-solid fa-hand-pointer" aria-hidden="true"></i>
           <span>Buttons</span>
         </a>
       </li>
@@ -114,9 +118,9 @@
           <span>Colors</span>
         </a>
       </li>
-      <li class="active">
-        <a href="charts.html">
-          <i class="fa-solid fa-chart-pie"></i>
+      <li class="active" role="listitem">
+        <a href="charts.html" aria-current="page" aria-label="Charts - Current page, view charts and analytics components">
+          <i class="fa-solid fa-chart-pie" aria-hidden="true"></i>
           <span>Charts</span>
         </a>
       </li>
@@ -339,48 +343,49 @@
     </ul>
   </nav>
 
-  <div class="sidebar-footer">
-    <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
-    <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
-    <a href="#" title="Twitter"><i class="fab fa-x-twitter"></i></a>
+  <div class="sidebar-footer" role="list" aria-label="Social links">
+    <a href="#" role="listitem" title="Visit GitHub" aria-label="GitHub"><i class="fab fa-github" aria-hidden="true"></i></a>
+    <a href="#" role="listitem" title="Visit LinkedIn" aria-label="LinkedIn"><i class="fab fa-linkedin" aria-hidden="true"></i></a>
+    <a href="#" role="listitem" title="Visit Twitter" aria-label="Twitter"><i class="fab fa-x-twitter" aria-hidden="true"></i></a>
   </div>
 </aside>
 
 <!-- ================= SIDEBAR BACKDROP ================= -->
-<div class="sidebar-backdrop" id="sidebarBackdrop" onclick="toggleSidebar()"></div>
+<div class="sidebar-backdrop" id="sidebarBackdrop" onclick="toggleSidebar()" role="presentation" aria-hidden="true"></div>
 
 <!-- ================= NAVBAR ================= -->
-<header class="navbar" id="navbar">
-  <button class="menu-toggle" onclick="toggleSidebar()">
-    <i class="fa-solid fa-bars"></i>
+<header class="navbar" id="navbar" role="navigation" aria-label="Top navigation bar">
+  <button class="menu-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar navigation" aria-expanded="false" aria-controls="sidebar">
+    <i class="fa-solid fa-bars" aria-hidden="true"></i>
   </button>
-  <div class="logo">UIverse</div>
-  <div class="search-bar">
-    <i class="fa-solid fa-magnifying-glass search-icon"></i>
-    <input type="text" id="searchInput" placeholder="Search components..." oninput="liveFilter(this.value)" />
-    <kbd class="search-kbd">⌘K</kbd>
+  <div class="logo" aria-label="UIverse - Component library home">UIverse</div>
+  <div class="search-bar" role="search">
+    <label for="searchInput" class="sr-only">Search components</label>
+    <i class="fa-solid fa-magnifying-glass search-icon" aria-hidden="true"></i>
+    <input type="text" id="searchInput" placeholder="Search components..." oninput="liveFilter(this.value)" aria-label="Search for components" />
+    <kbd class="search-kbd" aria-label="Keyboard shortcut">⌘K</kbd>
   </div>
   <div class="nav-right">
-    <button class="nav-btn outline-nav-btn"><i class="fa-solid fa-plus"></i> Add Component</button>
-    <button class="nav-btn primary-nav-btn"><i class="fa-solid fa-bookmark"></i> My Collection</button>
-    <button id="darkModeToggle" class="theme-toggle"><i class="fa-solid fa-moon"></i></button>
+    <button class="nav-btn outline-nav-btn" aria-label="Add new component"><i class="fa-solid fa-plus" aria-hidden="true"></i> Add Component</button>
+    <button class="nav-btn primary-nav-btn" aria-label="View my collection of components"><i class="fa-solid fa-bookmark" aria-hidden="true"></i> My Collection</button>
+    <button id="darkModeToggle" class="theme-toggle" aria-label="Toggle dark mode theme" aria-pressed="true"><i class="fa-solid fa-moon" aria-hidden="true"></i></button>
   </div>
 </header>
 
 <!-- ================= MAIN ================= -->
 
 <!-- ================= MAIN CONTENT ================= -->
-<main class="main-home">
+<main class="main-home" id="main-content">
 
   <header class="page-header">
-    <h1>Charts & Data Visualization</h1>
+    <h1>Charts & Data Visualization Components</h1>
     <p>Modern, responsive analytics components using pure HTML, CSS, and Vanilla JavaScript. No heavy frameworks.</p>
   </header>
 
-  <section class="component-grid">
+  <section class="component-grid" aria-label="Charts and visualization components">
 
     <!-- 1. Analytics Dashboard Cards -->
-    <div class="component-card">
+    <div class="component-card" id="component-1">
       <div class="card-header">
         <h3>Dashboard Stat Cards</h3>
         <p>Premium stat cards with mini sparklines.</p>
@@ -409,14 +414,14 @@
 
       </div>
       <div class="card-actions">
-        <button class="btn btn-code" onclick="toggleCode('code-1')">
-          <i class="fa-solid fa-code"></i> View Code
+        <button class="btn btn-code" onclick="toggleCode('code-1')" aria-label="View HTML code for Dashboard Stat Cards" aria-expanded="false" aria-controls="code-1">
+          <i class="fa-solid fa-code" aria-hidden="true"></i> View Code
         </button>
-        <button class="btn btn-copy" onclick="copyCode('preview-1', this)">
-          <i class="fa-regular fa-copy"></i> Copy
+        <button class="btn btn-copy" onclick="copyCode('preview-1', this)" aria-label="Copy Dashboard Stat Cards component code">
+          <i class="fa-regular fa-copy" aria-hidden="true"></i> Copy
         </button>
       </div>
-      <div class="code-snippet" id="code-1">
+      <div class="code-snippet" id="code-1" role="region" aria-label="Code snippet for Dashboard Stat Cards">
         <pre>&lt;!-- Add charts.css for styles --&gt;
 &lt;div class="stat-card-container"&gt;
   &lt;div class="stat-item"&gt;
@@ -431,7 +436,7 @@
     </div>
 
     <!-- 2. Animated Bar Chart -->
-    <div class="component-card">
+    <div class="component-card" id="component-2">
       <div class="card-header">
         <h3>Responsive Bar Chart</h3>
         <p>Dynamic CSS bar chart with JS animation.</p>
@@ -455,14 +460,14 @@
 
       </div>
       <div class="card-actions">
-        <button class="btn btn-code" onclick="toggleCode('code-2')">
-          <i class="fa-solid fa-code"></i> View Code
+        <button class="btn btn-code" onclick="toggleCode('code-2')" aria-label="View HTML code for Responsive Bar Chart" aria-expanded="false" aria-controls="code-2">
+          <i class="fa-solid fa-code" aria-hidden="true"></i> View Code
         </button>
-        <button class="btn btn-copy" onclick="copyCode('preview-2', this)">
-          <i class="fa-regular fa-copy"></i> Copy
+        <button class="btn btn-copy" onclick="copyCode('preview-2', this)" aria-label="Copy Responsive Bar Chart code">
+          <i class="fa-regular fa-copy" aria-hidden="true"></i> Copy
         </button>
       </div>
-      <div class="code-snippet" id="code-2">
+      <div class="code-snippet" id="code-2" role="region" aria-label="Code snippet for Responsive Bar Chart">
         <pre>&lt;!-- CSS Bar Chart Container --&gt;
 &lt;div class="chart-card"&gt;
   &lt;h3 class="chart-title"&gt;Weekly Traffic&lt;/h3&gt;
@@ -473,7 +478,7 @@
     </div>
 
     <!-- 3. Pie / Donut Chart -->
-    <div class="component-card">
+    <div class="component-card" id="component-3">
       <div class="card-header">
         <h3>Gradient Donut Chart</h3>
         <p>CSS Conic-gradient based donut chart.</p>
@@ -501,14 +506,14 @@
 
       </div>
       <div class="card-actions">
-        <button class="btn btn-code" onclick="toggleCode('code-3')">
-          <i class="fa-solid fa-code"></i> View Code
+        <button class="btn btn-code" onclick="toggleCode('code-3')" aria-label="View HTML code for Gradient Donut Chart" aria-expanded="false" aria-controls="code-3">
+          <i class="fa-solid fa-code" aria-hidden="true"></i> View Code
         </button>
-        <button class="btn btn-copy" onclick="copyCode('preview-3', this)">
-          <i class="fa-regular fa-copy"></i> Copy
+        <button class="btn btn-copy" onclick="copyCode('preview-3', this)" aria-label="Copy Gradient Donut Chart code">
+          <i class="fa-regular fa-copy" aria-hidden="true"></i> Copy
         </button>
       </div>
-      <div class="code-snippet" id="code-3">
+      <div class="code-snippet" id="code-3" role="region" aria-label="Code snippet for Gradient Donut Chart">
         <pre>&lt;div class="donut-container"&gt;
   &lt;div class="donut-chart" style="background: conic-gradient(#8b5cf6 0% 45%, #06b6d4 45% 75%, #ec4899 75% 100%);"&gt;
     &lt;div class="donut-hole"&gt;
@@ -520,7 +525,7 @@
     </div>
 
     <!-- 4. Progress Analytics Graph -->
-    <div class="component-card">
+    <div class="component-card" id="component-4">
       <div class="card-header">
         <h3>Target Progress Metrics</h3>
         <p>Animated shimmer progress bars.</p>
@@ -564,14 +569,14 @@
 
       </div>
       <div class="card-actions">
-        <button class="btn btn-code" onclick="toggleCode('code-4')">
-          <i class="fa-solid fa-code"></i> View Code
+        <button class="btn btn-code" onclick="toggleCode('code-4')" aria-label="View HTML code for Target Progress Metrics" aria-expanded="false" aria-controls="code-4">
+          <i class="fa-solid fa-code" aria-hidden="true"></i> View Code
         </button>
-        <button class="btn btn-copy" onclick="copyCode('preview-4', this)">
-          <i class="fa-regular fa-copy"></i> Copy
+        <button class="btn btn-copy" onclick="copyCode('preview-4', this)" aria-label="Copy Target Progress Metrics code">
+          <i class="fa-regular fa-copy" aria-hidden="true"></i> Copy
         </button>
       </div>
-      <div class="code-snippet" id="code-4">
+      <div class="code-snippet" id="code-4" role="region" aria-label="Code snippet for Target Progress Metrics">
         <pre>&lt;div class="progress-item"&gt;
   &lt;div class="progress-info"&gt;
     &lt;span&gt;New Signups&lt;/span&gt;&lt;span&gt;80%&lt;/span&gt;
@@ -584,7 +589,7 @@
     </div>
 
     <!-- 5. SVG Line Activity Graph -->
-    <div class="component-card">
+    <div class="component-card" id="component-5">
       <div class="card-header">
         <h3>SVG Line Activity Tracker</h3>
         <p>Interactive smooth SVG line graph.</p>
@@ -625,14 +630,14 @@
 
       </div>
       <div class="card-actions">
-        <button class="btn btn-code" onclick="toggleCode('code-5')">
-          <i class="fa-solid fa-code"></i> View Code
+        <button class="btn btn-code" onclick="toggleCode('code-5')" aria-label="View HTML code for SVG Line Activity Tracker" aria-expanded="false" aria-controls="code-5">
+          <i class="fa-solid fa-code" aria-hidden="true"></i> View Code
         </button>
-        <button class="btn btn-copy" onclick="copyCode('preview-5', this)">
-          <i class="fa-regular fa-copy"></i> Copy
+        <button class="btn btn-copy" onclick="copyCode('preview-5', this)" aria-label="Copy SVG Line Activity Tracker code">
+          <i class="fa-regular fa-copy" aria-hidden="true"></i> Copy
         </button>
       </div>
-      <div class="code-snippet" id="code-5">
+      <div class="code-snippet" id="code-5" role="region" aria-label="Code snippet for SVG Line Activity Tracker">
         <pre>&lt;svg class="svg-line-chart" viewBox="0 0 400 120"&gt;
   &lt;path class="svg-line" d="M0,80 Q50,40 100,60 T200,30 T300,70 T400,20"&gt;&lt;/path&gt;
   &lt;circle class="svg-point" cx="100" cy="60" r="4"&gt;&lt;/circle&gt;
@@ -641,7 +646,7 @@
     </div>
 
     <!-- 6. Interactive Area Chart -->
-    <div class="component-card">
+    <div class="component-card" id="component-6">
       <div class="card-header">
         <h3>Interactive Area Chart</h3>
         <p>Smooth SVG area chart with real-time mouse hover tracking.</p>
@@ -673,14 +678,14 @@
         </div>
       </div>
       <div class="card-actions">
-        <button class="btn btn-code" onclick="toggleCode('code-6', this)">
-          <i class="fa-solid fa-code"></i> View Code
+        <button class="btn btn-code" onclick="toggleCode('code-6', this)" aria-label="View HTML code for Interactive Area Chart" aria-expanded="false" aria-controls="code-6">
+          <i class="fa-solid fa-code" aria-hidden="true"></i> View Code
         </button>
-        <button class="btn btn-copy" onclick="copyCode('code-6-text', this)">
-          <i class="fa-regular fa-copy"></i> Copy
+        <button class="btn btn-copy" onclick="copyCode('code-6-text', this)" aria-label="Copy Interactive Area Chart code">
+          <i class="fa-regular fa-copy" aria-hidden="true"></i> Copy
         </button>
       </div>
-      <div class="code-snippet" id="code-6">
+      <div class="code-snippet" id="code-6" role="region" aria-label="Code snippet for Interactive Area Chart">
         <pre id="code-6-text"><code>&lt;div class="chart-card interactive-area-chart"&gt;
   &lt;div class="area-tooltip"&gt;
     &lt;span class="tooltip-time"&gt;12:00 PM&lt;/span&gt;
@@ -696,7 +701,7 @@
     </div>
 
     <!-- 7. Glassmorphism Pie Chart -->
-    <div class="component-card">
+    <div class="component-card" id="component-7">
       <div class="card-header">
         <h3>Glassmorphism Pie Chart</h3>
         <p>Premium frosted glass conic-gradient pie layout with core overlay.</p>
@@ -719,14 +724,14 @@
         </div>
       </div>
       <div class="card-actions">
-        <button class="btn btn-code" onclick="toggleCode('code-7', this)">
-          <i class="fa-solid fa-code"></i> View Code
+        <button class="btn btn-code" onclick="toggleCode('code-7', this)" aria-label="View HTML code for Glassmorphism Pie Chart" aria-expanded="false" aria-controls="code-7">
+          <i class="fa-solid fa-code" aria-hidden="true"></i> View Code
         </button>
-        <button class="btn btn-copy" onclick="copyCode('code-7-text', this)">
-          <i class="fa-regular fa-copy"></i> Copy
+        <button class="btn btn-copy" onclick="copyCode('code-7-text', this)" aria-label="Copy Glassmorphism Pie Chart code">
+          <i class="fa-regular fa-copy" aria-hidden="true"></i> Copy
         </button>
       </div>
-      <div class="code-snippet" id="code-7">
+      <div class="code-snippet" id="code-7" role="region" aria-label="Code snippet for Glassmorphism Pie Chart">
         <pre id="code-7-text"><code>&lt;div class="chart-card glass-pie-card"&gt;
   &lt;div class="pie-container"&gt;
     &lt;div class="glass-pie" style="background: conic-gradient(#8b5cf6 0% 45%, #06b6d4 45% 75%, #ec4899 75% 90%, #f59e0b 90% 100%);"&gt;&lt;/div&gt;
@@ -740,7 +745,7 @@
     </div>
 
     <!-- 8. Animated Radar Chart -->
-    <div class="component-card">
+    <div class="component-card" id="component-8">
       <div class="card-header">
         <h3>Animated Radar Chart</h3>
         <p>Concentric SVG pentagon axes with dynamic profile selector triggers.</p>
@@ -775,14 +780,14 @@
         </div>
       </div>
       <div class="card-actions">
-        <button class="btn btn-code" onclick="toggleCode('code-8', this)">
-          <i class="fa-solid fa-code"></i> View Code
+        <button class="btn btn-code" onclick="toggleCode('code-8', this)" aria-label="View HTML code for Animated Radar Chart" aria-expanded="false" aria-controls="code-8">
+          <i class="fa-solid fa-code" aria-hidden="true"></i> View Code
         </button>
-        <button class="btn btn-copy" onclick="copyCode('code-8-text', this)">
-          <i class="fa-regular fa-copy"></i> Copy
+        <button class="btn btn-copy" onclick="copyCode('code-8-text', this)" aria-label="Copy Animated Radar Chart code">
+          <i class="fa-regular fa-copy" aria-hidden="true"></i> Copy
         </button>
       </div>
-      <div class="code-snippet" id="code-8">
+      <div class="code-snippet" id="code-8" role="region" aria-label="Code snippet for Animated Radar Chart">
         <pre id="code-8-text"><code>&lt;svg class="radar-svg" viewBox="0 0 200 200"&gt;
   &lt;polygon points="100,10 185,72 153,171 47,171 15,72" class="radar-grid"&gt;&lt;/polygon&gt;
   &lt;polygon points="100,30 176,82 121,128 73,128 40,78" class="radar-active-poly"&gt;&lt;/polygon&gt;
@@ -791,7 +796,7 @@
     </div>
 
     <!-- 9. Real-Time Analytics Graph -->
-    <div class="component-card">
+    <div class="component-card" id="component-9">
       <div class="card-header">
         <h3>Real-Time Analytics Graph</h3>
         <p>Smooth crawling streaming graph using progressive coordinate injection.</p>
@@ -815,14 +820,14 @@
         </div>
       </div>
       <div class="card-actions">
-        <button class="btn btn-code" onclick="toggleCode('code-9', this)">
-          <i class="fa-solid fa-code"></i> View Code
+        <button class="btn btn-code" onclick="toggleCode('code-9', this)" aria-label="View HTML code for Real-Time Analytics Graph" aria-expanded="false" aria-controls="code-9">
+          <i class="fa-solid fa-code" aria-hidden="true"></i> View Code
         </button>
-        <button class="btn btn-copy" onclick="copyCode('code-9-text', this)">
-          <i class="fa-regular fa-copy"></i> Copy
+        <button class="btn btn-copy" onclick="copyCode('code-9-text', this)" aria-label="Copy Real-Time Analytics Graph code">
+          <i class="fa-regular fa-copy" aria-hidden="true"></i> Copy
         </button>
       </div>
-      <div class="code-snippet" id="code-9">
+      <div class="code-snippet" id="code-9" role="region" aria-label="Code snippet for Real-Time Analytics Graph">
         <pre id="code-9-text"><code>&lt;div class="chart-card real-time-card"&gt;
   &lt;span class="live-dot-tag"&gt;&lt;span class="live-pulse"&gt;&lt;/span&gt;LIVE&lt;/span&gt;
   &lt;svg viewBox="0 0 400 120"&gt;
@@ -833,7 +838,7 @@
     </div>
 
     <!-- 10. Heatmap Activity Grid -->
-    <div class="component-card">
+    <div class="component-card" id="component-10">
       <div class="card-header">
         <h3>Heatmap Activity Grid</h3>
         <p>Interactive calendar grid tracking 364 annual commit contribution details.</p>
@@ -859,14 +864,14 @@
         </div>
       </div>
       <div class="card-actions">
-        <button class="btn btn-code" onclick="toggleCode('code-10', this)">
-          <i class="fa-solid fa-code"></i> View Code
+        <button class="btn btn-code" onclick="toggleCode('code-10', this)" aria-label="View HTML code for Heatmap Activity Grid" aria-expanded="false" aria-controls="code-10">
+          <i class="fa-solid fa-code" aria-hidden="true"></i> View Code
         </button>
-        <button class="btn btn-copy" onclick="copyCode('code-10-text', this)">
-          <i class="fa-regular fa-copy"></i> Copy
+        <button class="btn btn-copy" onclick="copyCode('code-10-text', this)" aria-label="Copy Heatmap Activity Grid code">
+          <i class="fa-regular fa-copy" aria-hidden="true"></i> Copy
         </button>
       </div>
-      <div class="code-snippet" id="code-10">
+      <div class="code-snippet" id="code-10" role="region" aria-label="Code snippet for Heatmap Activity Grid">
         <pre id="code-10-text"><code>&lt;div class="chart-card annual-heatmap-card"&gt;
   &lt;div class="annual-grid" id="annual-grid"&gt;&lt;/div&gt;
   &lt;div class="heatmap-detail-card"&gt;Hover over cells to see activity&lt;/div&gt;
@@ -877,28 +882,28 @@
   </section>
 
   <!-- Scroll to Top -->
-  <button id="scrollTopBtn" onclick="scrollToTop()">
-    <i class="fa-solid fa-chevron-up"></i>
+  <button id="scrollTopBtn" onclick="scrollToTop()" aria-label="Scroll to top of page">
+    <i class="fa-solid fa-chevron-up" aria-hidden="true"></i>
   </button>
 
   <!-- Copy Toast -->
   <div id="copyToast" class="copy-toast"><i class="fa-solid fa-check"></i> Copied to clipboard!</div>
 
   <!-- FOOTER -->
-  <footer class="footer">
+  <footer class="footer" role="contentinfo">
     <div class="footer-container">
       <div class="footer-col brand">
-        <h2 class="footer-logo">⬡ UIverse</h2>
+        <h2 class="footer-logo"><span aria-label="Hexagon">⬡</span> UIverse</h2>
         <p>Build modern, reusable UI components with clean HTML, CSS, and JavaScript.</p>
-        <div class="socials">
-          <a href="#"><i class="fab fa-github"></i></a>
-          <a href="#"><i class="fab fa-linkedin"></i></a>
-          <a href="#"><i class="fab fa-x-twitter"></i></a>
+        <div class="socials" role="list">
+          <a href="#" role="listitem" aria-label="Visit our GitHub"><i class="fab fa-github" aria-hidden="true"></i></a>
+          <a href="#" role="listitem" aria-label="Visit our LinkedIn"><i class="fab fa-linkedin" aria-hidden="true"></i></a>
+          <a href="#" role="listitem" aria-label="Visit our Twitter"><i class="fab fa-x-twitter" aria-hidden="true"></i></a>
         </div>
       </div>
       <div class="footer-col">
         <h3>Explore</h3>
-        <ul>
+        <ul role="list">
           <li><a href="button.html">Buttons</a></li>
           <li><a href="navbar.html">Navbars</a></li>
           <li><a href="cards.html">Cards</a></li>
@@ -908,7 +913,7 @@
       </div>
       <div class="footer-col">
         <h3>Resources</h3>
-        <ul>
+        <ul role="list">
           <li><a href="#">Documentation</a></li>
           <li><a href="#">GitHub Repo</a></li>
           <li><a href="#">Community</a></li>
@@ -916,7 +921,7 @@
       </div>
       <div class="footer-col">
         <h3>Legal</h3>
-        <ul>
+        <ul role="list">
           <li><a href="privacypolicy.html">Privacy Policy</a></li>
           <li><a href="terms.html">Terms of Service</a></li>
         </ul>
@@ -925,9 +930,12 @@
         <h3>Stay Updated</h3>
         <p>Get notified when new components drop.</p>
         <div class="newsletter-form">
+          <label for="newsletter-email" class="sr-only">Email address for newsletter</label>
           <input 
             type="email"
+            id="newsletter-email"
             placeholder="your@email.com"
+            aria-label="Enter your email to subscribe"
             style="
               transition:0.3s ease;
               padding:12px;
@@ -939,7 +947,7 @@
             onmouseover="this.style.boxShadow='0 0 15px rgba(255,102,0,0.8)'"
             onmouseout="this.style.boxShadow='none'"
           />
-          <button type="button">Subscribe</button>
+          <button type="button" aria-label="Subscribe to newsletter">Subscribe</button>
         </div>
       </div>
     </div>
