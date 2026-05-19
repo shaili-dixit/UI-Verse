@@ -339,6 +339,34 @@ function initKeyboardShortcutsFeature() {
   document.body.appendChild(script);
 }
 
+function initDownloadFeature() {
+  const hasCards = document.querySelector('.component-card');
+  const hasActions = document.querySelector('.actions');
+  if (!hasCards && !hasActions) return;
+
+  const start = () => {
+    if (window.Download && typeof window.Download.init === 'function') {
+      window.Download.init();
+    }
+  };
+
+  if (window.Download && typeof window.Download.init === 'function') {
+    start();
+    return;
+  }
+
+  const existingScript = document.querySelector('script[src$="js/features/download.js"]');
+  if (existingScript) {
+    existingScript.addEventListener('load', start, { once: true });
+    return;
+  }
+
+  const script = document.createElement('script');
+  script.src = 'js/features/download.js';
+  script.onload = start;
+  document.body.appendChild(script);
+}
+
 function updateSidebarActiveLink() {
   const currentRoute = getNormalizedRoutePath();
 
@@ -653,6 +681,7 @@ window.addEventListener("DOMContentLoaded", () => {
   initLiveSandboxes();
   initDevicePreviewFeature();
   initKeyboardShortcutsFeature();
+  initDownloadFeature();
   initDarkMode();
   initScrollTop();
   initProgressBar();

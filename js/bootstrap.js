@@ -98,6 +98,10 @@ const Bootstrap = {
       UIverse.register('KeyboardShortcuts', KeyboardShortcuts);
     }
 
+    if (typeof Download !== 'undefined') {
+      UIverse.register('Download', Download);
+    }
+
     if (typeof TutorialMode !== 'undefined') {
       UIverse.register('TutorialMode', TutorialMode);
     }
