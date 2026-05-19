@@ -28,7 +28,7 @@ const ComponentGallery = {
   },
 
   _storageKeys: {
-    favorites: 'favorites'
+    favorites: 'uiVerseFavorites'
   },
 
   /**
@@ -300,12 +300,22 @@ const ComponentGallery = {
   },
 
   _getFavorites() {
+    if (window.Favorites && typeof window.Favorites.getFavoriteIds === 'function') {
+      return window.Favorites.getFavoriteIds();
+    }
+
     try {
       const raw = localStorage.getItem(this._storageKeys.favorites);
       const parsed = raw ? JSON.parse(raw) : [];
-      return Array.isArray(parsed)
-        ? parsed.map((id) => this._normalizeId(id)).filter(Boolean)
-        : [];
+      if (!Array.isArray(parsed)) return [];
+
+      return parsed
+        .map((item) => {
+          if (typeof item === 'string') return this._normalizeId(item);
+          if (item && typeof item === 'object') return this._normalizeId(item.id || item.componentId);
+          return '';
+        })
+        .filter(Boolean);
     } catch (e) {
       if (window.UIVERSE_DEBUG) console.error('getFavorites error', e);
       return [];
@@ -344,10 +354,17 @@ const ComponentGallery = {
   },
 
   _toggleFavoriteFromCard(button) {
-    try {
-      const card = button?.closest?.('.component-card');
-      if (!card) return;
+    const card = button?.closest?.('.component-card');
+    if (!card) return;
 
+    if (window.Favorites && typeof window.Favorites.toggleFromCard === 'function') {
+      window.Favorites.toggleFromCard(card);
+      this._syncFavoriteButtons();
+      this._applyFilters();
+      return;
+    }
+
+    try {
       const componentId = this._normalizeId(card.dataset.componentId);
       if (!componentId) return;
 

@@ -44,6 +44,76 @@ const Sidebar = {
     sidebarList.appendChild(li);
   },
 
+  getFavoritesRoute() {
+    const homeAnchor = document.querySelector('.sidebar a[href$="index.html"]');
+    const homeHref = homeAnchor?.getAttribute('href') || 'index.html';
+    if (/index\.html$/i.test(homeHref)) {
+      return homeHref.replace(/index\.html$/i, 'favorites.html');
+    }
+    return 'favorites.html';
+  },
+
+  ensureFavoritesLink() {
+    const sidebarList = document.querySelector('.sidebar ul');
+    if (!sidebarList) return;
+
+    const hasLink = Array.from(sidebarList.querySelectorAll('a')).some((anchor) => {
+      const href = (anchor.getAttribute('href') || '').toLowerCase();
+      return href.includes('favorites.html');
+    });
+
+    if (hasLink) return;
+
+    const li = document.createElement('li');
+    const a = document.createElement('a');
+    const icon = document.createElement('i');
+    const label = document.createElement('span');
+    const count = document.createElement('span');
+
+    a.setAttribute('href', this.getFavoritesRoute());
+    icon.className = 'fa-solid fa-star';
+    label.textContent = 'Favorites';
+    count.className = 'favorites-count-badge';
+    count.style.marginLeft = 'auto';
+    count.style.opacity = '0.9';
+    count.style.fontSize = '11px';
+    count.textContent = '0';
+
+    a.appendChild(icon);
+    a.appendChild(label);
+    a.appendChild(count);
+    li.appendChild(a);
+    sidebarList.appendChild(li);
+  },
+
+  getFavoritesCount() {
+    try {
+      const raw = localStorage.getItem('uiVerseFavorites');
+      const parsed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(parsed) ? parsed.length : 0;
+    } catch (error) {
+      return 0;
+    }
+  },
+
+  syncFavoritesCount() {
+    const badge = document.querySelector('.favorites-count-badge');
+    if (!badge) return;
+    badge.textContent = String(this.getFavoritesCount());
+  },
+
+  initFavoritesCountSync() {
+    if (this._state.listeners.some((entry) => entry.key === 'favorites-count-sync')) return;
+
+    const onFavoritesChanged = () => this.syncFavoritesCount();
+    document.addEventListener('uiverse:favorites:changed', onFavoritesChanged);
+    window.addEventListener('storage', onFavoritesChanged);
+    this._state.listeners.push({ key: 'favorites-count-sync', el: document, event: 'uiverse:favorites:changed', handler: onFavoritesChanged });
+    this._state.listeners.push({ key: 'favorites-count-sync-storage', el: window, event: 'storage', handler: onFavoritesChanged });
+
+    this.syncFavoritesCount();
+  },
+
   /**
    * Toggle sidebar visibility
    */
@@ -128,6 +198,8 @@ const Sidebar = {
 
     this.restoreState();
     this.ensureComponentsIndexLink();
+    this.ensureFavoritesLink();
+    this.initFavoritesCountSync();
     this.updateActiveLink();
     this.initLinkClose();
 

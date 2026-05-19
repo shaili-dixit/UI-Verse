@@ -86,6 +86,10 @@ const Bootstrap = {
       UIverse.register('ComponentGallery', ComponentGallery);
     }
 
+    if (typeof Favorites !== 'undefined') {
+      UIverse.register('Favorites', Favorites);
+    }
+
     if (typeof TutorialMode !== 'undefined') {
       UIverse.register('TutorialMode', TutorialMode);
     }
