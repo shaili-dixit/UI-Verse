@@ -214,6 +214,12 @@
       <span class="section-tag">
         UI BLOCKS
       </span>
+      <div>
+        <form class="scearch">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" placeholder="Filter Divs..." id="DivSearch">
+        </form>
+      </div>
 
       <h2 class="section-title">
         Popular Div Components
@@ -524,6 +530,28 @@
   </div>
 
 </footer>
+
+<script>
+
+/*====================
+Filter Scearch
+=====================*/
+  
+const input = document.getElementById("DivSearch");
+input.addEventListener("input", function () {
+  const filter = input.value.toLowerCase();
+  const cards = document.querySelectorAll(".form-component-card");
+  cards.forEach(card => {
+    const data = card.textContent.toLowerCase();
+    if (data.includes(filter)) {
+      card.style.display = "";
+    } else {
+      card.style.display = "none";
+    }
+  });
+});
+
+</script>
 
 </body>
 </html>
