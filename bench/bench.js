@@ -30,7 +30,7 @@ function waitForServer(url, timeout = 20000) {
 async function run() {
   console.log('Starting built-in static server on port', PORT);
   const mime = {
-    '.html': 'text/html', '.js': 'application/javascript', '.css': 'text/css', '.png': 'image/png', '.jpg': 'image/jpeg', '.svg': 'image/svg+xml', '.json': 'application/json'
+    '.html': 'text/html', '.js': 'application/javascript', '.mjs': 'application/javascript', '.css': 'text/css', '.png': 'image/png', '.jpg': 'image/jpeg', '.svg': 'image/svg+xml', '.json': 'application/json'
   };
 
   const staticServer = http.createServer((req, res) => {
