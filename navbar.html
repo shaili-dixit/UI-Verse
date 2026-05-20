@@ -21,6 +21,7 @@
   
   <link rel="stylesheet" href="home.css">
   <link rel="stylesheet" href="navbar.css">
+  <link rel="stylesheet" href="command-palette.css">
 </head>
 
 <body>
@@ -248,6 +249,9 @@
 =======
     <kbd class="search-kbd">⌘K</kbd>
 >>>>>>> upstream/main
+  </div>
+  <div id="searchDropdown" class="search-dropdown hidden">
+    <ul id="searchDropdownResults" class="search-dropdown-results"></ul>
   </div>
   <div class="nav-right">
     <button class="nav-btn outline-nav-btn"><i class="fa-solid fa-plus"></i> Add Component</button>
@@ -1813,6 +1817,9 @@
 >>>>>>> upstream/main
   </div>
 </footer>
+
+<script src="js/features/search.js"></script>
+<script src="js/features/command-palette.js"></script>
 
 <script>
   /* Dark Mode */
