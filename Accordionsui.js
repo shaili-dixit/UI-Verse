@@ -14,31 +14,33 @@ accordionItems.forEach(item=>{
       ".accordion-btn"
     );
 
-  button.addEventListener(
-    "click",
-    ()=>{
+  if (button) {
+    button.addEventListener(
+      "click",
+      ()=>{
 
-      const isActive =
-        item.classList.contains(
-          "active"
+        const isActive =
+          item.classList.contains(
+            "active"
+          );
+
+        accordionItems.forEach(i=>
+          i.classList.remove(
+            "active"
+          )
         );
 
-      accordionItems.forEach(i=>
-        i.classList.remove(
-          "active"
-        )
-      );
+        if(!isActive){
 
-      if(!isActive){
+          item.classList.add(
+            "active"
+          );
 
-        item.classList.add(
-          "active"
-        );
+        }
 
       }
-
-    }
-  );
+    );
+  }
 
 });
 
