@@ -222,18 +222,15 @@
       document.body.appendChild(overlay);
 
       overlay.addEventListener('click', (e) => {
-        if (e.target === overlay) closeOverlayKeepSelection();
+        if (e.target instanceof Element && !e.target.closest('.uiverse-compare-overlay__panel')) {
+          closeOverlayKeepSelection();
+        }
       });
 
       const clearBtn = document.getElementById('uiverse-compare-clear');
       const closeBtn = document.getElementById('uiverse-compare-close');
 
-      clearBtn.addEventListener('click', () => {
-        state.selectedIds = [];
-        persistSelection();
-        refreshCheckboxStates();
-        closeOverlayClearSelection();
-      });
+      clearBtn.addEventListener('click', () => closeOverlayClearSelection());
 
       closeBtn.addEventListener('click', () => closeOverlayKeepSelection());
 
@@ -268,24 +265,24 @@
   function closeOverlayKeepSelection() {
     const overlay = document.getElementById(OVERLAY_ID);
     if (!overlay) return;
+    syncActive(null);
     overlay.classList.remove('uiverse-compare-overlay--open');
     state.overlayOpen = false;
   }
 
   function closeOverlayClearSelection() {
-    const overlay = document.getElementById(OVERLAY_ID);
-    if (!overlay) return;
-    overlay.classList.remove('uiverse-compare-overlay--open');
-    state.overlayOpen = false;
+    state.selectedIds = [];
+    persistSelection();
+    refreshCheckboxStates();
+    closeOverlayKeepSelection();
   }
 
   function onKeyDown(e) {
-    if (e.key !== 'Escape') return;
+    if (e.key !== 'Escape' || !state.overlayOpen) return;
 
-    // Requirement: Escape exits compare mode.
-    // Close overlay but keep selections; also clear active synchronized state.
-    syncActive(null);
-    closeOverlayKeepSelection();
+    // Escape exits compare mode completely.
+    e.preventDefault();
+    closeOverlayClearSelection();
   }
 
   function maybeInit() {
