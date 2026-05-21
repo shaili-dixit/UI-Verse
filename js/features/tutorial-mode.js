@@ -14,6 +14,9 @@ const TutorialMode = {
     overlayEl: null,
     tooltipEl: null,
     highlightEl: null,
+    overlayClickHandler: null,
+    keydownHandler: null,
+    refreshHandler: null,
     completionKey: '',
     lastOptions: null
   },
@@ -60,6 +63,7 @@ const TutorialMode = {
     this._state.active = true;
 
     this._ensureUI();
+    this._bindUIEvents();
 
     // Attach tutorial-mode styles (safe to inject multiple times)
     this._injectStyles();
@@ -149,9 +153,20 @@ const TutorialMode = {
     this._state.overlayEl = overlay;
     this._state.tooltipEl = panel;
     this._state.highlightEl = highlight;
+  },
 
-    // Actions
-    overlay.addEventListener('click', (e) => {
+  _bindUIEvents() {
+    if (!this._state.overlayEl) return;
+
+    if (this._state.overlayClickHandler) {
+      this._state.overlayEl.removeEventListener('click', this._state.overlayClickHandler);
+    }
+
+    if (this._state.keydownHandler) {
+      document.removeEventListener('keydown', this._state.keydownHandler);
+    }
+
+    this._state.overlayClickHandler = (e) => {
       const btn = e.target && e.target.closest && e.target.closest('button[data-action]');
       if (!btn) return;
       const action = btn.getAttribute('data-action');
@@ -160,18 +175,22 @@ const TutorialMode = {
       else if (action === 'back') this.back();
       else if (action === 'skip') this.skip();
       else if (action === 'restart') this.restart();
-    });
+    };
 
-    // Keyboard
-    document.addEventListener('keydown', (e) => {
+    this._state.keydownHandler = (e) => {
       if (!this._state.active) return;
       if (e.key === 'Escape') {
         e.preventDefault();
         this.skip();
+        return;
       }
       if (e.key === 'ArrowRight') this.next();
       if (e.key === 'ArrowLeft') this.back();
-    });
+    };
+
+    this._state.overlayEl.addEventListener('click', this._state.overlayClickHandler);
+    document.addEventListener('keydown', this._state.keydownHandler);
+
   },
 
   _render() {
@@ -256,11 +275,11 @@ const TutorialMode = {
     };
 
     // Keep a single handler to avoid leaks
-    if (this._state._refreshHandler) {
-      window.removeEventListener('scroll', this._state._refreshHandler);
-      window.removeEventListener('resize', this._state._refreshHandler);
+    if (this._state.refreshHandler) {
+      window.removeEventListener('scroll', this._state.refreshHandler);
+      window.removeEventListener('resize', this._state.refreshHandler);
     }
-    this._state._refreshHandler = refresh;
+    this._state.refreshHandler = refresh;
     window.addEventListener('scroll', refresh, { passive: true });
     window.addEventListener('resize', refresh);
   },
@@ -289,6 +308,22 @@ const TutorialMode = {
   complete(skip = false) {
     this._state.active = false;
     this._setCompleted();
+
+    if (this._state.refreshHandler) {
+      window.removeEventListener('scroll', this._state.refreshHandler);
+      window.removeEventListener('resize', this._state.refreshHandler);
+      this._state.refreshHandler = null;
+    }
+
+    if (this._state.overlayEl && this._state.overlayClickHandler) {
+      this._state.overlayEl.removeEventListener('click', this._state.overlayClickHandler);
+      this._state.overlayClickHandler = null;
+    }
+
+    if (this._state.keydownHandler) {
+      document.removeEventListener('keydown', this._state.keydownHandler);
+      this._state.keydownHandler = null;
+    }
 
     if (this._state.highlightEl) this._state.highlightEl.style.display = 'none';
     if (this._state.overlayEl) this._state.overlayEl.style.display = 'none';
