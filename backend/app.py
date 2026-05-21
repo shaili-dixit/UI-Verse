@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import threading
 import sqlite3
 from datetime import datetime, timedelta
 from pathlib import Path
+from urllib.parse import quote
 
 import pandas as pd
 from flask import Flask, jsonify, redirect, request, send_from_directory
@@ -19,8 +21,10 @@ PROJECT_ROOT = BASE_DIR.parent
 DATA_PATH = BASE_DIR / "data" / "crop_history.csv"
 TRACE_DB_PATH = BASE_DIR / "data" / "produce_traceability.sqlite3"
 IOT_DB_PATH = BASE_DIR / "data" / "iot_telemetry.sqlite3"
+EQUIPMENT_DB_PATH = BASE_DIR / "data" / "equipment_marketplace.sqlite3"
 IOT_DEFAULT_THRESHOLD = 32.0
 IOT_WORKER_INTERVAL_SECONDS = 60
+MARKETPLACE_DEFAULT_PIN = "560001"
 
 PRICE_PER_TON = {
     "Corn": 320,
@@ -176,6 +180,53 @@ IOT_SEEDS = [
     },
 ]
 
+EQUIPMENT_SEEDS = [
+    {
+        "id": 1,
+        "name": "Compact Tractor 45HP",
+        "description": "Fuel-efficient tractor for plowing, hauling, and row-crop work.",
+        "daily_rate": 180,
+        "owner_id": "FARM-001",
+        "owner_name": "Asha Patel",
+        "status": "available",
+        "pin_code": "560001",
+        "photo_data_url": None,
+    },
+    {
+        "id": 2,
+        "name": "Rotavator Pro 120",
+        "description": "Heavy-duty rotavator for soil preparation and seed bed finishing.",
+        "daily_rate": 120,
+        "owner_id": "FARM-002",
+        "owner_name": "Rahul Verma",
+        "status": "available",
+        "pin_code": "560002",
+        "photo_data_url": None,
+    },
+    {
+        "id": 3,
+        "name": "Self-Propelled Sprayer",
+        "description": "Precision sprayer for fertilizer and crop protection applications.",
+        "daily_rate": 150,
+        "owner_id": "FARM-003",
+        "owner_name": "Meera Nair",
+        "status": "available",
+        "pin_code": "560001",
+        "photo_data_url": None,
+    },
+    {
+        "id": 4,
+        "name": "Mini Combine Harvester",
+        "description": "Suitable for small and mid-size grain harvest operations.",
+        "daily_rate": 260,
+        "owner_id": "FARM-004",
+        "owner_name": "Sanjay Singh",
+        "status": "available",
+        "pin_code": "560010",
+        "photo_data_url": None,
+    },
+]
+
 
 def load_model() -> Pipeline:
     data = pd.read_csv(DATA_PATH)
@@ -214,6 +265,13 @@ def get_traceability_connection() -> sqlite3.Connection:
 
 def get_iot_connection() -> sqlite3.Connection:
     connection = sqlite3.connect(IOT_DB_PATH)
+    connection.row_factory = sqlite3.Row
+    connection.execute("PRAGMA foreign_keys = ON")
+    return connection
+
+
+def get_equipment_connection() -> sqlite3.Connection:
+    connection = sqlite3.connect(EQUIPMENT_DB_PATH)
     connection.row_factory = sqlite3.Row
     connection.execute("PRAGMA foreign_keys = ON")
     return connection
@@ -365,6 +423,20 @@ def ensure_iot_db() -> None:
                 FOREIGN KEY (telemetry_id) REFERENCES iot_telemetry(id),
                 UNIQUE (telemetry_id, alert_type)
             );
+
+            CREATE TABLE IF NOT EXISTS platform_notifications (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                source_type TEXT NOT NULL,
+                notification_type TEXT NOT NULL,
+                recipient TEXT NOT NULL,
+                title TEXT NOT NULL,
+                message TEXT NOT NULL,
+                severity TEXT NOT NULL,
+                related_url TEXT,
+                metadata_json TEXT,
+                created_at TEXT NOT NULL,
+                read_at TEXT
+            );
             """
         )
 
@@ -381,6 +453,333 @@ def ensure_iot_db() -> None:
             )
 
         scan_iot_alerts(connection)
+
+
+def make_placeholder_photo(label: str, accent: str) -> str:
+    safe_label = label.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+    svg = f"""
+    <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 500' role='img' aria-label='{safe_label}'>
+      <defs>
+        <linearGradient id='g' x1='0%' y1='0%' x2='100%' y2='100%'>
+          <stop offset='0%' stop-color='{accent}'/>
+          <stop offset='100%' stop-color='#143c2b'/>
+        </linearGradient>
+      </defs>
+      <rect width='800' height='500' rx='36' fill='url(#g)'/>
+      <circle cx='640' cy='110' r='110' fill='rgba(255,255,255,0.12)'/>
+      <circle cx='120' cy='390' r='150' fill='rgba(255,255,255,0.08)'/>
+      <text x='50%' y='48%' text-anchor='middle' fill='white' font-family='Manrope, Arial, sans-serif' font-size='48' font-weight='800'>{safe_label}</text>
+      <text x='50%' y='58%' text-anchor='middle' fill='rgba(255,255,255,0.78)' font-family='Manrope, Arial, sans-serif' font-size='22' font-weight='600'>Available for nearby farm rental</text>
+    </svg>
+    """.strip()
+    encoded = quote(svg)
+    return f"data:image/svg+xml;charset=utf-8,{encoded}"
+
+
+def ensure_equipment_db() -> None:
+    EQUIPMENT_DB_PATH.parent.mkdir(parents=True, exist_ok=True)
+
+    with get_equipment_connection() as connection:
+        connection.executescript(
+            """
+            CREATE TABLE IF NOT EXISTS equipment (
+                id INTEGER PRIMARY KEY,
+                name TEXT NOT NULL,
+                description TEXT NOT NULL,
+                daily_rate REAL NOT NULL,
+                owner_id TEXT NOT NULL,
+                owner_name TEXT NOT NULL,
+                status TEXT NOT NULL,
+                pin_code TEXT NOT NULL,
+                photo_data_url TEXT,
+                created_at TEXT NOT NULL
+            );
+
+            CREATE TABLE IF NOT EXISTS rental_bookings (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                equipment_id INTEGER NOT NULL,
+                renter_id TEXT NOT NULL,
+                renter_name TEXT NOT NULL,
+                start_date TEXT NOT NULL,
+                end_date TEXT NOT NULL,
+                total_cost REAL NOT NULL,
+                created_at TEXT NOT NULL,
+                FOREIGN KEY (equipment_id) REFERENCES equipment(id)
+            );
+
+            CREATE TABLE IF NOT EXISTS platform_notifications (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                source_type TEXT NOT NULL,
+                notification_type TEXT NOT NULL,
+                recipient TEXT NOT NULL,
+                title TEXT NOT NULL,
+                message TEXT NOT NULL,
+                severity TEXT NOT NULL,
+                related_url TEXT,
+                metadata_json TEXT,
+                created_at TEXT NOT NULL,
+                read_at TEXT
+            );
+
+            """
+        )
+
+        if connection.execute("SELECT COUNT(*) FROM equipment").fetchone()[0]:
+            return
+
+        created_at = datetime.utcnow().isoformat(timespec="seconds") + "Z"
+        seed_rows = []
+        for equipment in EQUIPMENT_SEEDS:
+            accent = "#2f6f9f" if equipment["id"] % 2 else "#226b47"
+            seed_rows.append(
+                (
+                    equipment["id"],
+                    equipment["name"],
+                    equipment["description"],
+                    equipment["daily_rate"],
+                    equipment["owner_id"],
+                    equipment["owner_name"],
+                    equipment["status"],
+                    equipment["pin_code"],
+                    equipment["photo_data_url"] or make_placeholder_photo(equipment["name"], accent),
+                    created_at,
+                )
+            )
+
+        connection.executemany(
+            """
+            INSERT INTO equipment (
+                id, name, description, daily_rate, owner_id, owner_name,
+                status, pin_code, photo_data_url, created_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            seed_rows,
+        )
+
+
+def record_platform_notification(
+    connection: sqlite3.Connection,
+    *,
+    source_type: str,
+    notification_type: str,
+    recipient: str,
+    title: str,
+    message: str,
+    severity: str = "medium",
+    related_url: str | None = None,
+    metadata: dict[str, object] | None = None,
+) -> int:
+    cursor = connection.execute(
+        """
+        INSERT INTO platform_notifications (
+            source_type, notification_type, recipient, title, message,
+            severity, related_url, metadata_json, created_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """,
+        (
+            source_type,
+            notification_type,
+            recipient,
+            title,
+            message,
+            severity,
+            related_url,
+            json.dumps(metadata or {}),
+            datetime.utcnow().isoformat(timespec="seconds") + "Z",
+        ),
+    )
+    return int(cursor.lastrowid)
+
+
+def get_platform_notifications(source_type: str | None = None, limit: int = 50) -> list[dict[str, object]]:
+    rows: list[dict[str, object]] = []
+
+    def fetch_from_db(connection: sqlite3.Connection, db_label: str) -> None:
+        if source_type:
+            query_rows = connection.execute(
+                """
+                SELECT *
+                FROM platform_notifications
+                WHERE source_type = ?
+                ORDER BY created_at DESC, id DESC
+                LIMIT ?
+                """,
+                (source_type, limit),
+            ).fetchall()
+        else:
+            query_rows = connection.execute(
+                """
+                SELECT *
+                FROM platform_notifications
+                ORDER BY created_at DESC, id DESC
+                LIMIT ?
+                """,
+                (limit,),
+            ).fetchall()
+
+        for row in query_rows:
+            rows.append(
+                {
+                    "id": f"{db_label}:{row['id']}",
+                    "source_type": row["source_type"],
+                    "notification_type": row["notification_type"],
+                    "recipient": row["recipient"],
+                    "title": row["title"],
+                    "message": row["message"],
+                    "severity": row["severity"],
+                    "related_url": row["related_url"],
+                    "metadata": json.loads(row["metadata_json"] or "{}"),
+                    "created_at": row["created_at"],
+                }
+            )
+
+    with get_iot_connection() as iot_connection, get_equipment_connection() as equipment_connection:
+        fetch_from_db(iot_connection, "iot")
+        fetch_from_db(equipment_connection, "equipment")
+
+    rows.sort(key=lambda item: str(item["created_at"]), reverse=True)
+    return rows[:limit]
+
+
+def get_equipment_record(equipment_id: int) -> sqlite3.Row | None:
+    with get_equipment_connection() as connection:
+        return connection.execute(
+            "SELECT * FROM equipment WHERE id = ?",
+            (equipment_id,),
+        ).fetchone()
+
+
+def get_equipment_bookings(equipment_id: int) -> list[dict[str, object]]:
+    with get_equipment_connection() as connection:
+        rows = connection.execute(
+            """
+            SELECT id, equipment_id, renter_id, renter_name, start_date, end_date, total_cost, created_at
+            FROM rental_bookings
+            WHERE equipment_id = ?
+            ORDER BY start_date ASC, id ASC
+            """,
+            (equipment_id,),
+        ).fetchall()
+
+    return [
+        {
+            "id": row["id"],
+            "equipment_id": row["equipment_id"],
+            "renter_id": row["renter_id"],
+            "renter_name": row["renter_name"],
+            "start_date": row["start_date"],
+            "end_date": row["end_date"],
+            "total_cost": row["total_cost"],
+            "created_at": row["created_at"],
+        }
+        for row in rows
+    ]
+
+
+def equipment_is_available(connection: sqlite3.Connection, equipment_id: int, start_date: str, end_date: str) -> bool:
+    rows = connection.execute(
+        """
+        SELECT 1
+        FROM rental_bookings
+        WHERE equipment_id = ?
+          AND NOT (end_date < ? OR start_date > ?)
+        LIMIT 1
+        """,
+        (equipment_id, start_date, end_date),
+    ).fetchone()
+    return rows is None
+
+
+def format_equipment_row(row: sqlite3.Row) -> dict[str, object]:
+    return {
+        "id": row["id"],
+        "name": row["name"],
+        "description": row["description"],
+        "daily_rate": row["daily_rate"],
+        "owner_id": row["owner_id"],
+        "owner_name": row["owner_name"],
+        "status": row["status"],
+        "pin_code": row["pin_code"],
+        "photo_data_url": row["photo_data_url"],
+        "created_at": row["created_at"],
+    }
+
+
+def list_equipment_records(query: str | None = None, pin_code: str | None = None, status: str = "available") -> list[dict[str, object]]:
+    filters = ["1 = 1"]
+    parameters: list[object] = []
+
+    if status:
+        filters.append("status = ?")
+        parameters.append(status)
+
+    if query:
+        filters.append("(name LIKE ? OR description LIKE ? OR owner_name LIKE ?)")
+        needle = f"%{query.strip()}%"
+        parameters.extend([needle, needle, needle])
+
+    if pin_code:
+        filters.append("(pin_code = ? OR substr(pin_code, 1, 3) = substr(?, 1, 3))")
+        parameters.extend([pin_code, pin_code])
+
+    order_case = "CASE WHEN pin_code = ? THEN 0 WHEN substr(pin_code, 1, 3) = substr(?, 1, 3) THEN 1 ELSE 2 END, created_at DESC"
+    order_parameters = [pin_code or MARKETPLACE_DEFAULT_PIN, pin_code or MARKETPLACE_DEFAULT_PIN]
+
+    with get_equipment_connection() as connection:
+        rows = connection.execute(
+            f"""
+            SELECT *
+            FROM equipment
+            WHERE {' AND '.join(filters)}
+            ORDER BY {order_case}
+            """,
+            parameters + order_parameters,
+        ).fetchall()
+
+    return [format_equipment_row(row) for row in rows]
+
+
+def get_equipment_detail(equipment_id: int) -> dict[str, object] | None:
+    with get_equipment_connection() as connection:
+        row = connection.execute(
+            "SELECT * FROM equipment WHERE id = ?",
+            (equipment_id,),
+        ).fetchone()
+
+        if row is None:
+            return None
+
+        bookings = connection.execute(
+            """
+            SELECT id, equipment_id, renter_id, renter_name, start_date, end_date, total_cost, created_at
+            FROM rental_bookings
+            WHERE equipment_id = ?
+            ORDER BY start_date ASC, id ASC
+            """,
+            (equipment_id,),
+        ).fetchall()
+
+    equipment = format_equipment_row(row)
+    equipment["bookings"] = [
+        {
+            "id": booking["id"],
+            "equipment_id": booking["equipment_id"],
+            "renter_id": booking["renter_id"],
+            "renter_name": booking["renter_name"],
+            "start_date": booking["start_date"],
+            "end_date": booking["end_date"],
+            "total_cost": booking["total_cost"],
+            "created_at": booking["created_at"],
+        }
+        for booking in bookings
+    ]
+    return equipment
+
+
+def seed_equipment_notification_target(equipment: sqlite3.Row | dict[str, object]) -> tuple[str, str]:
+    owner_name = equipment["owner_name"] if isinstance(equipment, sqlite3.Row) else equipment["owner_name"]
+    owner_id = equipment["owner_id"] if isinstance(equipment, sqlite3.Row) else equipment["owner_id"]
+    return str(owner_name), str(owner_id)
 
 
 def record_iot_telemetry(
@@ -499,6 +898,22 @@ def scan_iot_alerts(
                     channel,
                     datetime.utcnow().isoformat(timespec="seconds") + "Z",
                 ),
+            )
+            record_platform_notification(
+                connection,
+                source_type="iot",
+                notification_type="irrigation",
+                recipient=row["farmer_name"],
+                title="Irrigation needed",
+                message=message,
+                severity=severity,
+                related_url="/notifications.html",
+                metadata={
+                    "device_id": row["device_id"],
+                    "farm_name": row["farm_name"],
+                    "soil_moisture": row["soil_moisture"],
+                    "threshold": row["moisture_threshold"],
+                },
             )
             created += 1
 
@@ -724,6 +1139,7 @@ def fetch_batch_detail(batch_id: int) -> dict[str, object] | None:
 
 ensure_traceability_db()
 ensure_iot_db()
+ensure_equipment_db()
 
 
 @app.get("/health")
@@ -929,6 +1345,201 @@ def list_iot_alerts() -> tuple[dict[str, object], int]:
     ), 200
 
 
+@app.get("/api/notifications")
+def list_platform_notifications_route() -> tuple[dict[str, object], int]:
+    source = request.args.get("source")
+    limit = int(request.args.get("limit", 50))
+    notifications = get_platform_notifications(source_type=source if source not in (None, "all", "") else None, limit=limit)
+    return jsonify({"notifications": notifications}), 200
+
+
+@app.get("/api/equipment/listings")
+def list_equipment_route() -> tuple[dict[str, object], int]:
+    query = request.args.get("q")
+    pin_code = request.args.get("pin_code")
+    status = request.args.get("status", "available")
+    listings = list_equipment_records(query=query, pin_code=pin_code, status=status)
+    return jsonify({"equipment": listings, "count": len(listings)}), 200
+
+
+@app.post("/api/equipment/listings")
+def create_equipment_listing() -> tuple[dict[str, object], int]:
+    payload = request.get_json(silent=True) or {}
+    required_fields = ["name", "description", "daily_rate", "owner_id", "owner_name", "pin_code"]
+    missing = [field for field in required_fields if field not in payload]
+    if missing:
+        return jsonify({"error": "Missing equipment fields.", "missing_fields": missing}), 400
+
+    try:
+        name = str(payload["name"]).strip()
+        description = str(payload["description"]).strip()
+        daily_rate = float(payload["daily_rate"])
+        owner_id = str(payload["owner_id"]).strip()
+        owner_name = str(payload["owner_name"]).strip()
+        pin_code = str(payload["pin_code"]).strip()
+        photo_data_url = str(payload.get("photo_data_url") or "").strip() or None
+        status = str(payload.get("status") or "available").strip().lower()
+    except (TypeError, ValueError):
+        return jsonify({"error": "Invalid equipment listing payload."}), 400
+
+    if not name or not description or daily_rate <= 0 or not owner_id or not owner_name or not pin_code:
+        return jsonify({"error": "Equipment listing values must be complete and positive."}), 400
+
+    if status not in {"available", "reserved", "rented", "maintenance"}:
+        status = "available"
+
+    with get_equipment_connection() as connection:
+        cursor = connection.execute(
+            """
+            INSERT INTO equipment (
+                name, description, daily_rate, owner_id, owner_name,
+                status, pin_code, photo_data_url, created_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                name,
+                description,
+                daily_rate,
+                owner_id,
+                owner_name,
+                status,
+                pin_code,
+                photo_data_url or make_placeholder_photo(name, "#226b47"),
+                datetime.utcnow().isoformat(timespec="seconds") + "Z",
+            ),
+        )
+        equipment_id = int(cursor.lastrowid)
+        connection.commit()
+
+    detail = get_equipment_detail(equipment_id)
+    return jsonify({"message": "Equipment listed.", "equipment": detail}), 201
+
+
+@app.get("/api/equipment/<int:equipment_id>")
+def get_equipment_route(equipment_id: int) -> tuple[dict[str, object], int]:
+    detail = get_equipment_detail(equipment_id)
+    if detail is None:
+        return jsonify({"error": "Equipment not found."}), 404
+    return jsonify(detail), 200
+
+
+@app.post("/api/equipment/bookings")
+def create_equipment_booking() -> tuple[dict[str, object], int]:
+    payload = request.get_json(silent=True) or {}
+    required_fields = ["equipment_id", "renter_id", "renter_name", "start_date", "end_date"]
+    missing = [field for field in required_fields if field not in payload]
+    if missing:
+        return jsonify({"error": "Missing booking fields.", "missing_fields": missing}), 400
+
+    try:
+        equipment_id = int(payload["equipment_id"])
+        renter_id = str(payload["renter_id"]).strip()
+        renter_name = str(payload["renter_name"]).strip()
+        start_date = datetime.fromisoformat(str(payload["start_date"])).date()
+        end_date = datetime.fromisoformat(str(payload["end_date"])).date()
+    except (TypeError, ValueError):
+        return jsonify({"error": "Invalid booking payload."}), 400
+
+    if start_date > end_date:
+        return jsonify({"error": "Start date must be on or before the end date."}), 400
+
+    equipment = get_equipment_detail(equipment_id)
+    if equipment is None:
+        return jsonify({"error": "Equipment not found."}), 404
+
+    with get_equipment_connection() as connection:
+        if not equipment_is_available(connection, equipment_id, start_date.isoformat(), end_date.isoformat()):
+            return jsonify({"error": "Selected dates overlap with an existing rental booking."}), 409
+
+        rental_days = (end_date - start_date).days + 1
+        rental_days = max(rental_days, 1)
+        total_cost = rental_days * float(equipment["daily_rate"])
+
+        cursor = connection.execute(
+            """
+            INSERT INTO rental_bookings (
+                equipment_id, renter_id, renter_name, start_date, end_date, total_cost, created_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                equipment_id,
+                renter_id,
+                renter_name,
+                start_date.isoformat(),
+                end_date.isoformat(),
+                total_cost,
+                datetime.utcnow().isoformat(timespec="seconds") + "Z",
+            ),
+        )
+
+        booking_id = int(cursor.lastrowid)
+        connection.execute(
+            "UPDATE equipment SET status = ? WHERE id = ?",
+            ("reserved", equipment_id),
+        )
+
+        related_url = f"/equipment-detail.html?equipment_id={equipment_id}"
+        booking_title = f"{equipment['name']} booked"
+        booking_message = (
+            f"{renter_name} booked {equipment['name']} from {start_date.isoformat()} to {end_date.isoformat()} "
+            f"for ${total_cost:.2f}."
+        )
+
+        record_platform_notification(
+            connection,
+            source_type="equipment",
+            notification_type="booking",
+            recipient=str(equipment["owner_name"]),
+            title=booking_title,
+            message=booking_message,
+            severity="high",
+            related_url=related_url,
+            metadata={
+                "equipment_id": equipment_id,
+                "renter_id": renter_id,
+                "renter_name": renter_name,
+                "start_date": start_date.isoformat(),
+                "end_date": end_date.isoformat(),
+                "total_cost": total_cost,
+                "role": "owner",
+            },
+        )
+
+        record_platform_notification(
+            connection,
+            source_type="equipment",
+            notification_type="booking",
+            recipient=renter_name,
+            title="Booking confirmed",
+            message=f"Your booking for {equipment['name']} is confirmed. Total: ${total_cost:.2f}.",
+            severity="medium",
+            related_url=related_url,
+            metadata={
+                "equipment_id": equipment_id,
+                "booking_id": booking_id,
+                "renter_id": renter_id,
+                "start_date": start_date.isoformat(),
+                "end_date": end_date.isoformat(),
+                "total_cost": total_cost,
+                "role": "renter",
+            },
+        )
+
+        connection.commit()
+
+    detail = get_equipment_detail(equipment_id)
+    return jsonify(
+        {
+            "message": "Booking confirmed.",
+            "booking_id": booking_id,
+            "equipment": detail,
+            "total_cost": round(total_cost, 2),
+            "rental_days": rental_days,
+            "notifications_created": 2,
+        }
+    ), 201
+
+
 @app.get("/verify-produce")
 def verify_produce_entry() -> object:
     return send_from_directory(PROJECT_ROOT, "verify-produce.html")
@@ -947,6 +1558,16 @@ def farm_dashboard_entry() -> object:
 @app.get("/notifications.html")
 def notifications_entry() -> object:
     return send_from_directory(PROJECT_ROOT, "notifications.html")
+
+
+@app.get("/equipment.html")
+def equipment_entry() -> object:
+    return send_from_directory(PROJECT_ROOT, "equipment.html")
+
+
+@app.get("/equipment-detail.html")
+def equipment_detail_entry() -> object:
+    return send_from_directory(PROJECT_ROOT, "equipment-detail.html")
 
 
 if __name__ == "__main__":
