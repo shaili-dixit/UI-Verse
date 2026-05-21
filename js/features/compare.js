@@ -13,6 +13,9 @@
     overlayOpen: false,
   };
 
+  let cardsObserver = null;
+  let reconcileQueued = false;
+
   function getCardElements() {
     return Array.from(document.querySelectorAll(CARD_SELECTOR));
   }
@@ -31,7 +34,9 @@
 
     const raw = name ? `${name}__${cat}` : `card__${idx}`;
     const safe = raw.replace(/[^a-zA-Z0-9_-]/g, '_').slice(0, 80);
-    const id = `${safe}__${idx}`;
+
+    // Keep metadata-backed IDs stable across DOM re-renders.
+    const id = name ? safe : `${safe}__${idx}`;
 
     cardEl.setAttribute(CARD_ID_ATTR, id);
     return id;
@@ -310,6 +315,45 @@
     }
   }
 
+  function mutationTouchesCards(mutations) {
+    const hasCard = (node) => {
+      if (!(node instanceof Element)) return false;
+      return node.matches(CARD_SELECTOR) || !!node.querySelector(CARD_SELECTOR);
+    };
+
+    return mutations.some((mutation) => {
+      if (mutation.type !== 'childList') return false;
+      return Array.from(mutation.addedNodes).some(hasCard) || Array.from(mutation.removedNodes).some(hasCard);
+    });
+  }
+
+  function scheduleCardReconcile() {
+    if (reconcileQueued) return;
+    reconcileQueued = true;
+
+    const run = () => {
+      reconcileQueued = false;
+      maybeInit();
+    };
+
+    if (typeof window.requestAnimationFrame === 'function') {
+      window.requestAnimationFrame(run);
+      return;
+    }
+    setTimeout(run, 0);
+  }
+
+  function observeDynamicCards() {
+    if (cardsObserver || typeof MutationObserver === 'undefined' || !document.body) return;
+
+    cardsObserver = new MutationObserver((mutations) => {
+      if (!mutationTouchesCards(mutations)) return;
+      scheduleCardReconcile();
+    });
+
+    cardsObserver.observe(document.body, { childList: true, subtree: true });
+  }
+
   // Styles injected only when needed (so compare doesn't affect other pages too much)
   function injectStylesOnce() {
     if (document.getElementById('uiverse-compare-styles')) return;
@@ -452,10 +496,12 @@
     document.addEventListener('DOMContentLoaded', () => {
       injectStylesOnce();
       maybeInit();
+      observeDynamicCards();
     });
   } else {
     injectStylesOnce();
     maybeInit();
+    observeDynamicCards();
   }
 })();
 
