@@ -43,6 +43,14 @@ jobs:
         run: |
           npm run components:version:check
 
+      - name: Component registry consistency check
+        run: |
+          npm run components:registry:check
+
+      - name: Component registry validator unit tests
+        run: |
+          npm run test:registry:check
+
       - name: Link validation (linkinator)
         run: |
           npm run link-check

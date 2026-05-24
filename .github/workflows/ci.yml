@@ -39,6 +39,12 @@ jobs:
       - name: Component metadata check
         run: npm run components:version:check
 
+      - name: Component registry consistency check
+        run: npm run components:registry:check
+
+      - name: Component registry validator unit tests
+        run: npm run test:registry:check
+
       - name: Package smoke test
         run: npm run package:check
 
