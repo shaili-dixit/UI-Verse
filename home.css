@@ -956,6 +956,7 @@ body.dark-mode .feature-card:hover {
   color: #888;
   text-decoration: none;
   font-size: 14px;
+  position: relative;
   transition: color var(--transition);
 }
 
@@ -963,7 +964,27 @@ body.dark-mode .feature-card:hover {
   color: var(--accent);
 }
 
+.footer-col ul li a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 0%;
+  height: 2px;
+  background: var(--accent);
+  transition: width 0.3s ease;
+}
+
+.footer-col ul li a:hover {
+  color: var(--accent);
+}
+
+.footer-col ul li a:hover::after {
+  width: 100%;
+}
+
 .socials {
+  margin-top: 12px;
   display: flex;
   gap: 12px;
 }
@@ -979,13 +1000,14 @@ body.dark-mode .feature-card:hover {
   color: #888;
   text-decoration: none;
   font-size: 14px;
-  transition: all var(--transition);
+  transition: all 0.3s ease;
 }
 
 .socials a:hover {
   background: var(--accent);
   color: #fff;
-  transform: translateY(-2px);
+  transform: translateY(-2px) scale(1.1);
+  box-shadow: 0 0 8px var(--accent);
 }
 
 .newsletter-form {
