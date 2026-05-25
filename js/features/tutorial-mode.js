@@ -120,6 +120,40 @@ const TutorialMode = {
     } catch {}
   },
 
+  _getOverlayClickHandler() {
+    if (!this._state.overlayClickHandler) {
+      this._state.overlayClickHandler = (e) => {
+        const btn = e.target && e.target.closest && e.target.closest('button[data-action]');
+        if (!btn) return;
+        const action = btn.getAttribute('data-action');
+
+        if (action === 'next') this.next();
+        else if (action === 'back') this.back();
+        else if (action === 'skip') this.skip();
+        else if (action === 'restart') this.restart();
+      };
+    }
+
+    return this._state.overlayClickHandler;
+  },
+
+  _getKeydownHandler() {
+    if (!this._state.keydownHandler) {
+      this._state.keydownHandler = (e) => {
+        if (!this._state.active) return;
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          this.skip();
+          return;
+        }
+        if (e.key === 'ArrowRight') this.next();
+        if (e.key === 'ArrowLeft') this.back();
+      };
+    }
+
+    return this._state.keydownHandler;
+  },
+
   /**
    * Start tutorial for a given page/category.
    * @param {{pageKey?: string, categoryKey?: string, steps: Array, force?: boolean}} options
@@ -268,38 +302,13 @@ const TutorialMode = {
   _bindUIEvents() {
     if (!this._state.overlayEl) return;
 
-    if (this._state.overlayClickHandler) {
-      this._state.overlayEl.removeEventListener('click', this._state.overlayClickHandler);
-    }
+    const overlayClickHandler = this._getOverlayClickHandler();
+    const keydownHandler = this._getKeydownHandler();
 
-    if (this._state.keydownHandler) {
-      document.removeEventListener('keydown', this._state.keydownHandler);
-    }
-
-    this._state.overlayClickHandler = (e) => {
-      const btn = e.target && e.target.closest && e.target.closest('button[data-action]');
-      if (!btn) return;
-      const action = btn.getAttribute('data-action');
-
-      if (action === 'next') this.next();
-      else if (action === 'back') this.back();
-      else if (action === 'skip') this.skip();
-      else if (action === 'restart') this.restart();
-    };
-
-    this._state.keydownHandler = (e) => {
-      if (!this._state.active) return;
-      if (e.key === 'Escape') {
-        e.preventDefault();
-        this.skip();
-        return;
-      }
-      if (e.key === 'ArrowRight') this.next();
-      if (e.key === 'ArrowLeft') this.back();
-    };
-
-    this._state.overlayEl.addEventListener('click', this._state.overlayClickHandler);
-    document.addEventListener('keydown', this._state.keydownHandler);
+    this._state.overlayEl.removeEventListener('click', overlayClickHandler);
+    document.removeEventListener('keydown', keydownHandler);
+    this._state.overlayEl.addEventListener('click', overlayClickHandler);
+    document.addEventListener('keydown', keydownHandler);
 
   },
 
@@ -486,12 +495,10 @@ const TutorialMode = {
 
     if (this._state.overlayEl && this._state.overlayClickHandler) {
       this._state.overlayEl.removeEventListener('click', this._state.overlayClickHandler);
-      this._state.overlayClickHandler = null;
     }
 
     if (this._state.keydownHandler) {
       document.removeEventListener('keydown', this._state.keydownHandler);
-      this._state.keydownHandler = null;
     }
 
     if (this._state.highlightEl) this._state.highlightEl.style.display = 'none';
