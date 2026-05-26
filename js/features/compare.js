@@ -205,18 +205,21 @@
     });
 
     for (const [compareId, entry] of cachedCompareCells.entries()) {
-      if (nextIds.includes(compareId)) continue;
-      if (entry && entry.cell && entry.cell.parentElement === gridEl) {
-        gridEl.removeChild(entry.cell);
-      }
-    }
+      const cell = entry && entry.cell;
+      const cellInGrid = !!cell && gridEl.contains(cell);
 
-    cachedCompareCells.forEach((entry, compareId) => {
-      if (nextIds.includes(compareId)) return;
-      if (entry && entry.cell && !entry.cell.isConnected) {
+      if (nextIds.includes(compareId)) {
+        continue;
+      }
+
+      if (cellInGrid) {
+        gridEl.removeChild(cell);
+      }
+
+      if (!cellInGrid || !cell.isConnected) {
         cachedCompareCells.delete(compareId);
       }
-    });
+    }
   }
 
   function ensureCompareId(cardEl) {
