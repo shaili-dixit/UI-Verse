@@ -45,7 +45,31 @@
   <link rel="stylesheet" href="shared-sidebar.css">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="home.css">
-
+  <style>
+    /* Cookie banner close transition */
+    .cookie-banner {
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    .cookie-banner.hidden {
+      opacity: 0;
+      transform: translateY(20px);
+      pointer-events: none;
+    }
+  </style>
+  <script>
+    function dismissBanner() {
+      const banner = document.querySelector('.cookie-banner');
+      if (banner) {
+        banner.classList.add('hidden');
+      }
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+      const acceptBtn = document.querySelector('.accept-btn');
+      if (acceptBtn) {
+        acceptBtn.addEventListener('click', dismissBanner);
+      }
+    });
+  </script>
 </head>
 
 <body>
@@ -717,15 +741,15 @@
           through your browser settings at any time.
         </p>
 
-        <div class="cookie-banner">
+        <div class="cookie-banner" role="dialog" aria-live="polite" aria-labelledby="cookieBannerTitle" aria-describedby="cookieBannerDesc">
 
           <div class="banner-content">
 
-            <h3>
+            <h3 id="cookieBannerTitle">
               Cookie Preferences
             </h3>
 
-            <p>
+            <p id="cookieBannerDesc">
               We use cookies to personalize content,
               analyze traffic and improve your experience.
             </p>
@@ -734,11 +758,11 @@
 
           <div class="banner-actions">
 
-            <button class="banner-btn accept-btn">
+            <button class="banner-btn accept-btn" aria-label="Accept all cookies">
               Accept All
             </button>
 
-            <button class="banner-btn settings-btn">
+            <button class="banner-btn settings-btn" aria-label="Manage cookie settings">
               Manage Settings
             </button>
 
@@ -770,20 +794,6 @@
        <!-- COOKIE STATS -->
 
 <div class="policy-card cookie-stats-card">
-
-<div class="policy-card cookie-stats-card">
-
-  <div class="stats-header">
-
-    <h2>
-      <i class="fa-solid fa-chart-pie"></i>
-      Cookie Usage Overview
-    </h2>
-
-    <p>
-      Transparency about how cookies are used across the platform.
-    </p>
-        </section>
 
   <div class="stats-header">
 
@@ -997,57 +1007,7 @@
 <div class="floating-cookie-card">
   </div>
 
-  <!-- FOOTER -->
-<footer class="footer">
-  <div class="footer-container">
-    <div class="footer-col brand">
-      <h2 class="footer-logo">⬡ UIverse</h2>
-      <p>Build modern, reusable UI components with clean HTML, CSS, and JavaScript.</p>
-      <div class="socials">
-        <a href="https://github.com" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
-        <a href="https://linkedin.com" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
-        <a href="https://twitter.com" target="_blank" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
-      </div>
-    </div>
-    <div class="footer-col">
-      <h3>Explore</h3>
-      <ul>
-        <li><a href="button.html">Buttons</a></li>
-        <li><a href="navbar.html">Navbars</a></li>
-        <li><a href="cards.html">Cards</a></li>
-        <li><a href="inputs.html">Inputs</a></li>
-        <li><a href="forms.html">Forms</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h3>Resources</h3>
-      <ul>
-        <li><a href="#">Documentation</a></li>
-        <li><a href="#">GitHub Repo</a></li>
-        <li><a href="#">Community</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h3>Legal</h3>
-      <ul>
-        <li><a href="privacypolicy.html">Privacy Policy</a></li>
-        <li><a href="terms.html">Terms of Service</a></li>
-      </ul>
-    </div>
-    <div class="footer-col newsletter">
-      <h3>Stay Updated</h3>
-      <p>Get notified when new components drop.</p>
-      <div class="newsletter-form">
-        <input type="email" placeholder="your@email.com">
-        <button type="button">Subscribe</button>
-      </div>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <p>© 2026 UIverse. Made with ❤️ for developers worldwide.</p>
-  </div>
-</footer>
-      </footer>
+
 
   <div class="floating-icon">
     <i class="fa-solid fa-cookie"></i>
