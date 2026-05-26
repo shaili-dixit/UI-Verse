@@ -1,11 +1,11 @@
 body{
-  background:#0f172a;
+  background:white;
   font-family:sans-serif;
-  color:#fff;
+  color:black;
 }
 
 .carousel-page{
-  padding:60px;
+  padding:300px;
 }
 
 .carousel-demo{
@@ -107,11 +107,12 @@ body{
   gap:20px;
   overflow-x:auto;
   padding-bottom:10px;
+  background-color: #00d4ff;
 }
 
 .feature-card{
   min-width:280px;
-  background:#1e293b;
+  
   padding:30px;
   border-radius:20px;
   border:1px solid rgba(255,255,255,0.08);
@@ -131,7 +132,7 @@ body{
 }
 
 .feature-card p{
-  color:#cbd5e1;
+  color:black;
   line-height:1.6;
 }
 
@@ -164,7 +165,11 @@ body{
   transform:rotateY(20deg) rotateX(10deg) scale(1.05);
 }
 
-/* ================= FOOTER ================= */
+.flip-carousel {
+  display: flex;
+  gap: 20px;
+  perspective: 1000px;
+}
 
 .footer {
   width: 100%;
@@ -209,10 +214,107 @@ body{
   list-style: none;
   padding: 0;
   margin: 0;
+.flip-card {
+  width: 180px;
+  height: 220px;
+  background: #111;
+  color: #fff;
+  border-radius: 10px;
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+  cursor: pointer;
+  position: relative;
 }
 
-.footer-col ul li {
-  margin-bottom: 12px;
+.flip-card:hover {
+  transform: rotateY(180deg);
+}
+
+.flip-front, .flip-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  padding: 10px;
+}
+
+.flip-back {
+  background: #333;
+  transform: rotateY(180deg);
+}
+.circular-carousel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.circle-item {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff6, #f06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: #fff;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.circle-item:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(255,255,255,0.5);
+}
+.zoom-carousel {
+  display: flex;
+  gap: 20px;
+}
+
+.zoom-card {
+  width: 200px;
+  padding: 20px;
+  background: plum;
+  color: #fff;
+  border-radius: 10px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.zoom-card:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(0,0,0,0.4);
+}
+.split-carousel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.split-slide {
+  display: flex;
+  justify-content: space-between;
+  background:linear-gradient(to right, blue,pink,gold);
+  color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.split-left, .split-right {
+  flex: 1;
+  text-align: center;
+  font-weight: bold;
+}
+.cube-carousel {
+  width: 200px;
+  height: 200px;
+  position: relative;
+  transform-style: preserve-3d;
+  animation: rotateCube 8s infinite linear;
 }
 
 .footer-col ul li a {
@@ -225,9 +327,65 @@ body{
 .footer-col ul li a:hover {
   color: #ff7a45;
   padding-left: 5px;
+.cube-face {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  background: #444;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  border: 2px solid #fff;
 }
 
-.socials {
+.cube-face:nth-child(1) { transform: rotateY(0deg) translateZ(100px); }
+.cube-face:nth-child(2) { transform: rotateY(90deg) translateZ(100px); }
+.cube-face:nth-child(3) { transform: rotateY(180deg) translateZ(100px); }
+.cube-face:nth-child(4) { transform: rotateY(-90deg) translateZ(100px); }
+
+@keyframes rotateCube {
+  from { transform: rotateY(0deg); }
+  to { transform: rotateY(360deg); }
+}
+.carousel-title {
+  margin-bottom: 20px; /* adds space below the title */
+}
+.coverflow-card,
+.stack-card,
+.neon-card,
+.product-card,
+.testimonial-card {
+  margin: 15px; /* adds space around each card */
+}
+.coverflow-carousel,
+.stack-carousel,
+.neon-carousel,
+.product-carousel,
+.testimonial-carousel {
+  display: flex;
+  gap: 20px; /* uniform spacing between cards */
+}
+.carousel-section {
+  margin-bottom: 40px; /* space after each section */
+}
+
+.carousel-title {
+  margin-bottom: 25px; /* space between title and cards */
+}
+.fade-carousel {
+  position: relative;
+  width: 100%;
+  height: 200px;
+}
+
+.fade-slide {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, orange, pink);
+  color: #fff;
   display: flex;
   gap: 12px;
   margin-top: 20px;
@@ -251,9 +409,54 @@ body{
 .socials a:hover {
   background: #ff7a45;
   transform: translateY(-3px);
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
 }
 
-.newsletter-form {
+.fade-slide.active {
+  opacity: 1;
+}
+.tilt-carousel {
+  display: flex;
+  gap: 20px;
+}
+
+.tilt-card {
+  width: 160px;
+  height: 200px;
+  background: linear-gradient(to right,white, green);
+  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(-5deg);
+  transition: transform 0.3s;
+  border-radius: 10px;
+}
+
+.tilt-card:hover {
+  transform: rotate(0deg) scale(1.05);
+}
+.wave-carousel {
+  display: flex;
+  gap: 20px;
+}
+
+.wave-item {
+  padding: 20px;
+  background: linear-gradient(135deg, #06f, #0ff);
+  color: #fff;
+  border-radius: 8px;
+  animation: waveMotion 2s infinite ease-in-out;
+}
+
+@keyframes waveMotion {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.shadow-carousel {
   display: flex;
   gap: 10px;
   margin-top: 18px;
@@ -298,7 +501,63 @@ body{
 .footer-bottom p {
   color: #7d8799;
   font-size: 13px;
+  gap: 20px;
 }
+
+.shadow-card {
+  width: 180px;
+  height: 200px;
+  background: lightseagreen;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.shadow-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 30px rgba(0,0,0,0.6);
+}
+.flip-vertical-carousel {
+  display: flex;
+  gap: 20px;
+  perspective: 1000px;
+}
+
+.flip-vertical-card {
+  width: 160px;
+  height: 200px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+  cursor: pointer;
+}
+
+.flip-vertical-card:hover {
+  transform: rotateX(180deg);
+}
+
+.flip-front, .flip-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #222;
+  color: #fff;
+  border-radius: 10px;
+}
+
+.flip-back {
+  background: #444;
+  transform: rotateX(180deg);
+}
+
 
 /* ================= RESPONSIVE ================= */
 
@@ -404,7 +663,7 @@ body{
   height: 90vh;
 
   border-radius: 36px;
-
+  
   overflow: hidden;
 
   margin-bottom: 70px;
