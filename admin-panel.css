@@ -26,6 +26,7 @@
   --font-heading: "Syne", sans-serif;
   --font-body: "DM Sans", sans-serif;
   --transition-smooth: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+  --sidebar-w: 250px;
 }
 
 body.light-mode {
@@ -1367,10 +1368,16 @@ body {
   }
 }
 
+
 /* ============================================================
    FOOTER
    ============================================================ */
 .footer {
+  margin-left: var(--sidebar-w);
+  background: #111;
+  color: #aaa;
+  padding: 0;
+  margin-top: 60px;
   background: var(--bg2);
   padding: 20px 0;
   margin-left: 250px; /* offset for sidebar */
@@ -1418,6 +1425,19 @@ body {
 }
 
 .footer-col ul li a {
+  color: #888;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color var(--transition);
+}
+
+.footer-col ul li a:hover {
+  color: var(--accent);
+}
+
+.socials {
+  display: flex;
+  gap: 12px;
   position: relative;
   color: #a1a1aa;
   text-decoration: none;
@@ -1462,6 +1482,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #888;
+  text-decoration: none;
+  font-size: 14px;
   color: #aaa;
   font-size: 16px;
   text-decoration: none;
@@ -1518,6 +1541,9 @@ body {
   border-top: 1px solid #1e1e1e;
   padding: 20px 48px;
   text-align: center;
+  font-size: 13px;
+  color: #555;
+}
   padding: 30px;
   color: #777;
   border-top: 1px solid rgba(255,255,255,0.05);
