@@ -55,6 +55,18 @@ body{
   background:#1d4ed8;
 }
 
+#clearAllBtn {
+  padding:14px 22px;
+  border:none;
+  background:#ef4444;
+  color:#fff;
+  border-radius:10px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+#clearAllBtn:hover{ background:#dc2626; }
+
 .task-input button:disabled{
   background:#93c5fd;
   cursor:not-allowed;
