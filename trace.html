@@ -1,17 +1,30 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https:; base-uri 'self'; frame-ancestors 'none'; object-src 'none'; connect-src 'self' http://127.0.0.1:5000 http://localhost:5000 https:; img-src 'self' data: https:; font-src 'self' data: https:; script-src 'self' https: 'unsafe-inline'; style-src 'self' https: 'unsafe-inline'">
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self' https:; base-uri 'self'; frame-ancestors 'none'; object-src 'none'; connect-src 'self' http://127.0.0.1:5000 http://localhost:5000 https:; img-src 'self' data: https:; font-src 'self' data: https:; script-src 'self' https: 'unsafe-inline'; style-src 'self' https: 'unsafe-inline'">
   <title>Produce Traceability — UI-Verse</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=Manrope:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="traceability.css">
 </head>
+
 <body>
   <main class="trace-shell">
+    <div class="back-home">
+      <a href="index.html" class="back-home-btn">
+        <i class="fa-solid fa-house">
+        </i> 
+        Back to Home
+      </a>
+    </div>
+
     <section class="trace-hero">
       <div>
         <span class="eyebrow">Blockchain-verified produce traceability</span>
@@ -57,6 +70,41 @@
       </section>
     </section>
   </main>
+
+  <style>
+    .back-home {
+      margin: 20px 0;
+      display: flex;
+      justify-content: flex-start;
+      /* aligns left */
+    }
+
+    .back-home-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+
+      padding: 10px 18px;
+      border-radius: 999px;
+      /* oval pill shape */
+
+      background: #22c55e;
+      /* green accent */
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+
+      transition: all 0.3s ease;
+    }
+
+    .back-home-btn:hover {
+      background: #16a34a;
+      /* darker green on hover */
+      color: #fff;
+      /* keep text white */
+    }
+  </style>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script src="js/features/traceability.js"></script>
