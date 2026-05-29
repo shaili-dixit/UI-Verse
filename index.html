@@ -435,6 +435,16 @@
   </section>
 
   <!-- ===== WHY UIVERSE ===== -->
+  <!-- ===== DISCOVERY INSIGHTS ===== -->
+  <section class="section insights-section">
+    <div class="section-header">
+      <span class="section-tag">Community Insights</span>
+      <h2 class="section-title">📊 Component Analytics</h2>
+      <p class="section-subtitle">Popular, trending, and hidden gem components based on real usage</p>
+    </div>
+    <div class="trending-section"></div>
+  </section>
+
   <section class="section why-section">
     <div class="section-header">
       <span class="section-tag">Why choose us</span>
@@ -628,60 +638,9 @@
     homeObserver.observe(el);
   });
 
-  
-  function handleSearch(e) {
-    if (e.key === "Enter") {
-      const query = document
-        .getElementById("searchInput")
-        .value
-        .trim()
-        .toLowerCase();
-
-      // Search mapping
-      const pages = {
-        button: "button.html",
-        buttons: "button.html",
-
-        navbar: "navbar.html",
-        navbars: "navbar.html",
-
-        card: "cards.html",
-        cards: "cards.html",
-
-        input: "inputs.html",
-        inputs: "inputs.html",
-
-        form: "forms.html",
-        forms: "forms.html",
-
-        badge: "badges.html",
-        badges: "badges.html",
-
-        loader: "loaders.html",
-        loaders: "loaders.html",
-
-        about: "about.html",
-
-        contact: "contact.html",
-
-        footer: "footer.html",
-
-        color: "color.html",
-        colors: "color.html",
-
-        pricing: "pricing.html",
-
-        alert: "alerts.html",
-        alerts: "alerts.html"
-      };
-
-      // Match keyword
-      if (pages[query]) {
-        window.location.href = pages[query];
-      } else {
-        alert("No matching component found!");
-      }
-    }
+  // Boot analytics insights
+  if (window.TrendingComponents && window.ComponentAnalytics) {
+    TrendingComponents.init('.trending-section');
   }
 
   function subscribe() {
