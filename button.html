@@ -1920,6 +1920,16 @@ themeBtn.addEventListener("click", () => {
     });
   }
 
+  /* ---------- Component Playground ---------- */
+  if (window.ComponentPlayground) {
+    ComponentPlayground.init();
+  }
+
+  /* ---------- Code Diff Viewer ---------- */
+  if (window.CodeDiff) {
+    CodeDiff.init();
+  }
+
   /* ---------- Scroll Animations ---------- */
   const buttonPageObserver = new IntersectionObserver(entries => {
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in-view'); });
@@ -2018,6 +2028,9 @@ themeBtn.addEventListener("click", () => {
   ]
 }
 </script>
+<script src="js/features/export-sandbox.js"></script>
+<script src="js/features/component-playground.js"></script>
+<script src="js/features/code-diff.js"></script>
 <script src="playground.js"></script>
 <script>
 window.addEventListener('load', () => {
