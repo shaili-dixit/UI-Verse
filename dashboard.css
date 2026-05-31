@@ -737,6 +737,16 @@ body{
     left:0;
   }
 
+  .stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
 }
 
 @media(max-width:768px){
