@@ -694,6 +694,39 @@
     }, 1500);
   }
 
+  if (score === 4) {
+  fill.classList.add('strong');
+  label.textContent = 'Strong 🛡️';
+  label.style.color = '#10b981';
+}
+
+const percent = (score / 4) * 100;
+fill.style.width = `${percent}%`;
+
+fill.className = 'pwd-strength-fill';
+
+if (score <= 1) {
+  fill.classList.add('weak');
+  label.textContent = 'Weak ❌';
+  label.style.color = '#f43f5e';
+}
+else if (score === 2) {
+  fill.classList.add('fair');
+  label.textContent = 'Fair ⚠️';
+  label.style.color = '#f97316';
+}
+else if (score === 3) {
+  fill.classList.add('good');
+  label.textContent = 'Good 👍';
+  label.style.color = '#eab308';
+}
+else {
+  fill.classList.add('strong');
+  label.textContent = 'Strong 🛡️';
+  label.style.color = '#10b981';
+}
+
+
   /* 2. Password Visibility toggle helper */
   function togglePasswordVisibility(inputId, btn) {
     const input = document.getElementById(inputId);

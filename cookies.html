@@ -69,6 +69,33 @@
         acceptBtn.addEventListener('click', dismissBanner);
       }
     });
+
+    function dismissBanner() {
+  const banner = document.querySelector(".cookie-banner");
+
+  if (!banner) return;
+
+  banner.classList.add("hidden");
+
+  setTimeout(() => {
+    banner.remove();
+  }, 400);
+
+  localStorage.setItem("cookiesAccepted", "true");
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const banner = document.querySelector(".cookie-banner");
+
+  if (localStorage.getItem("cookiesAccepted") === "true") {
+    banner?.remove();
+    return;
+  }
+
+  document
+    .querySelector(".accept-btn")
+    ?.addEventListener("click", dismissBanner);
+});
   </script>
 </head>
 
@@ -451,6 +478,123 @@
         </div>
       </div>
 
+      <input
+  type="text"
+  id="searchInput"
+  placeholder="Search components..."
+  oninput="liveFilter(this.value)"
+  data-a11y-remediation="label-needed"
+/>
+
+
+<!-- COOKIE STATS -->
+
+<div class="policy-card cookie-stats-card">
+
+  <div class="stats-header">
+    <h2>
+      <i class="fa-solid fa-chart-pie"></i>
+      Cookie Usage Overview
+    </h2>
+
+    <p>
+      Transparency about how cookies are used across the platform.
+    </p>
+  </div>
+
+  <div class="stats-grid">
+
+    <div class="stat-box">
+      <span class="stat-circle essential"></span>
+      <h3>45%</h3>
+      <p>Essential</p>
+    </div>
+
+    <div class="stat-box">
+      <span class="stat-circle analytics"></span>
+      <h3>25%</h3>
+      <p>Analytics</p>
+    </div>
+
+    <div class="stat-box">
+      <span class="stat-circle preference"></span>
+      <h3>20%</h3>
+      <p>Preferences</p>
+    </div>
+
+    <div class="stat-box">
+      <span class="stat-circle marketing"></span>
+      <h3>10%</h3>
+      <p>Marketing</p>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- COOKIE TIMELINE -->
+
+<div class="policy-card">
+
+  <h2>
+    <i class="fa-solid fa-clock-rotate-left"></i>
+    Cookie Lifecycle
+  </h2>
+
+  <div class="cookie-timeline">
+
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-content">
+        <h3>Visit Website</h3>
+        <p>Cookies are created when you access the platform.</p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-content">
+        <h3>Store Preferences</h3>
+        <p>Theme, language and session preferences are saved.</p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-content">
+        <h3>Analyze Activity</h3>
+        <p>Anonymous analytics improve user experience.</p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-content">
+        <h3>Automatic Expiry</h3>
+        <p>Cookies expire or can be removed anytime.</p>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- FLOATING INFO -->
+
+<div class="floating-cookie-card">
+
+  <div class="floating-icon">
+    <i class="fa-solid fa-cookie"></i>
+  </div>
+
+  <div>
+    <h3>Privacy First</h3>
+    <p>
+      Your data stays protected with secure cookie handling.
+    </p>
+  </div>
+
+</div>
       <nav class="site-sidebar-nav" aria-label="Primary page navigation">
         <ul>
           <li><a href="index.html"><i class="fa-solid fa-house"></i><span>Home</span></a></li>

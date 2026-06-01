@@ -1,6 +1,7 @@
 :root {
   --sidebar-width: 240px;
 }
+
 body {
   height: auto !important;
   min-height: 100vh !important;

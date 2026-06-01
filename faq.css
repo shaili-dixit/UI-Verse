@@ -344,3 +344,34 @@
     font-size: 1rem;
   }
 }
+
+.faq-answer {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition:
+    max-height .4s ease,
+    opacity .3s ease;
+}
+
+.faq-item.active .faq-answer {
+  opacity: 1;
+}
+
+.hero-glow{
+  position:absolute;
+  width:500px;
+  height:500px;
+  background:rgba(88,101,242,.18);
+  filter:blur(120px);
+  border-radius:50%;
+}
+
+.hero-grid{
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+  background-size:40px 40px;
+}

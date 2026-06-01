@@ -1654,3 +1654,332 @@ BASE CARD
     font-size: 40px;
   }
 }
+
+/* ==========================================
+   OVERVIEW STATS
+========================================== */
+
+.cb-overview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.cb-overview-card {
+  background: var(--surface, #fff);
+  border: 1.5px solid var(--border, #e2e8f0);
+  border-radius: 14px;
+  padding: 18px;
+  transition: all 0.25s ease;
+}
+
+.cb-overview-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(235, 104, 53, 0.3);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+}
+
+.cb-overview-card .value {
+  display: block;
+  font-family: 'Syne', sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #eb6835;
+  line-height: 1;
+}
+
+.cb-overview-card .label {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  color: var(--text-secondary, #64748b);
+}
+
+/* ==========================================
+   BADGES
+========================================== */
+
+.cb-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .3px;
+}
+
+.cb-badge--bronze {
+  background: rgba(194, 120, 60, 0.12);
+  color: #c2783c;
+  border: 1px solid rgba(194, 120, 60, 0.2);
+}
+
+.cb-badge--silver {
+  background: rgba(148, 163, 184, 0.12);
+  color: #64748b;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.cb-badge--gold {
+  background: rgba(245, 158, 11, 0.12);
+  color: #d97706;
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.cb-badge--elite {
+  background: linear-gradient(
+    135deg,
+    rgba(235,104,53,.12),
+    rgba(123,97,255,.12)
+  );
+  color: #7b61ff;
+  border: 1px solid rgba(123,97,255,.2);
+}
+
+/* ==========================================
+   ACHIEVEMENTS
+========================================== */
+
+.cb-achievements {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.cb-achievement {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(235,104,53,0.08);
+  border: 1px solid rgba(235,104,53,0.18);
+  color: #eb6835;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* ==========================================
+   HEATMAP
+========================================== */
+
+.cb-heatmap {
+  display: grid;
+  grid-template-columns: repeat(14, 1fr);
+  gap: 4px;
+  margin-top: 14px;
+}
+
+.cb-heat-cell {
+  aspect-ratio: 1;
+  border-radius: 4px;
+  background: #edf2f7;
+}
+
+.cb-heat-1 {
+  background: rgba(235,104,53,0.25);
+}
+
+.cb-heat-2 {
+  background: rgba(235,104,53,0.45);
+}
+
+.cb-heat-3 {
+  background: rgba(235,104,53,0.7);
+}
+
+.cb-heat-4 {
+  background: #eb6835;
+}
+
+/* ==========================================
+   PROGRESS BARS
+========================================== */
+
+.cb-progress-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cb-progress-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cb-progress-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+}
+
+.cb-progress-label {
+  font-weight: 600;
+}
+
+.cb-progress-value {
+  color: var(--text-secondary, #64748b);
+}
+
+.cb-progress {
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: #edf2f7;
+}
+
+.cb-progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    #eb6835,
+    #7b61ff
+  );
+}
+
+/* ==========================================
+   FEATURED COMPONENT CARD
+========================================== */
+
+.cb-featured {
+  border-radius: 14px;
+  padding: 18px;
+  margin-top: 10px;
+  border: 1.5px solid rgba(123,97,255,0.18);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(123,97,255,.06),
+      rgba(235,104,53,.05)
+    );
+}
+
+.cb-featured-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.cb-featured-stats {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cb-featured-stat {
+  background: rgba(255,255,255,.6);
+  border: 1px solid rgba(255,255,255,.4);
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* ==========================================
+   IMPACT SCORE BREAKDOWN
+========================================== */
+
+.cb-score-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cb-score-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cb-score-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+}
+
+.cb-score-track {
+  height: 8px;
+  border-radius: 999px;
+  background: #edf2f7;
+  overflow: hidden;
+}
+
+.cb-score-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    #7b61ff,
+    #eb6835
+  );
+}
+
+/* ==========================================
+   LEADERBOARD MEDALS
+========================================== */
+
+.cb-rank-medal {
+  font-size: 18px;
+  width: 24px;
+  text-align: center;
+}
+
+.cb-rank-medal.gold {
+  color: #f59e0b;
+}
+
+.cb-rank-medal.silver {
+  color: #94a3b8;
+}
+
+.cb-rank-medal.bronze {
+  color: #c08457;
+}
+
+/* ==========================================
+   SCROLLABLE LEADERBOARD
+========================================== */
+
+.cb-panel {
+  max-height: 820px;
+  overflow-y: auto;
+}
+
+.cb-panel::-webkit-scrollbar {
+  width: 6px;
+}
+
+.cb-panel::-webkit-scrollbar-thumb {
+  background: rgba(100,116,139,.3);
+  border-radius: 999px;
+}
+
+/* ==========================================
+   DARK MODE
+========================================== */
+
+.dark-mode .cb-overview-card,
+.dark-mode .cb-featured {
+  background: #111827;
+}
+
+.dark-mode .cb-progress,
+.dark-mode .cb-score-track {
+  background: rgba(255,255,255,.08);
+}
+
+.dark-mode .cb-heat-cell {
+  background: rgba(255,255,255,.08);
+}
+
+.dark-mode .cb-featured-stat {
+  background: rgba(255,255,255,.05);
+  border-color: rgba(255,255,255,.08);
+}

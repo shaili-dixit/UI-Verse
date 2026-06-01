@@ -506,3 +506,35 @@ body{
     grid-row:span 1;
   }
 }
+
+.box19{
+    grid-column:span 2;
+    grid-row:span 2;
+}
+
+.box20{
+    grid-column:span 1;
+    grid-row:span 2;
+}
+
+.box21{
+    grid-column:span 2;
+}
+
+.box22{
+    grid-column:span 2;
+}
+
+.box23{
+    grid-column:span 2;
+    grid-row:span 2;
+}
+
+.box24{
+    grid-column:span 3;
+}
+
+.box-featured{
+    grid-column:span 4;
+    grid-row:span 2;
+}
