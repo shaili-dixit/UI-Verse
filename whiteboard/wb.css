@@ -119,6 +119,15 @@ body{
   background: #dc2626;
 }
 
+#undoBtn, #redoBtn {
+  background: #374151;
+  padding: 10px 14px;
+}
+
+#undoBtn:hover, #redoBtn:hover {
+  background: #4b5563;
+}
+
 #saveWrapper {
   position: relative;
   height: 40px;

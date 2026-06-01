@@ -6,6 +6,8 @@ const clearBtn = document.getElementById("clearBtn");
 const brushBtn = document.getElementById("brushBtn");
 const eraserBtn = document.getElementById("eraserBtn");
 const fillBtn = document.getElementById("fillBtn");
+const undoBtn = document.getElementById("undoBtn");
+const redoBtn = document.getElementById("redoBtn");
 
 canvas.width = canvas.offsetWidth;
 canvas.height = canvas.offsetHeight;
@@ -13,8 +15,21 @@ canvas.height = canvas.offsetHeight;
 let drawing = false;
 let currentColor = "#000000";
 
+// History for undo/redo
+let history = [];
+let historyIndex = -1;
+
+function saveSnapshot() {
+  // Trim any redo future
+  history = history.slice(0, historyIndex + 1);
+  history.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
+  historyIndex++;
+}
+
 ctx.fillStyle = "#ffffff";
 ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+saveSnapshot();
 
 colorPicker.addEventListener("input", e => {
   currentColor = e.target.value;
@@ -24,11 +39,12 @@ colorPicker.addEventListener("input", e => {
 });
 
 canvas.addEventListener("mousedown", () => { drawing = true; });
-canvas.addEventListener("mouseup", () => { drawing = false; ctx.beginPath(); });
+canvas.addEventListener("mouseup", () => { drawing = false; ctx.beginPath(); saveSnapshot(); });
 canvas.addEventListener("mousemove", draw);
 canvas.addEventListener("click", (e) => {
   if (!fillBtn.classList.contains("active")) return;
   floodFill(e.offsetX, e.offsetY, currentColor);
+  saveSnapshot();
 });
 
 function setActiveTool(tool) {
@@ -58,6 +74,7 @@ clearBtn.addEventListener("click", () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = "#ffffff";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
+  saveSnapshot();
 });
 
 brushBtn.addEventListener("click", () => {
@@ -73,6 +90,9 @@ eraserBtn.addEventListener("click", () => {
 fillBtn.addEventListener("click", () => {
   setActiveTool(fillBtn);
 });
+
+undoBtn.addEventListener("click", undo);
+redoBtn.addEventListener("click", redo);
 
 let selectedFormat = "png";
 
@@ -130,6 +150,23 @@ function floodFill(startX, startY, fillColor) {
 
   ctx.putImageData(imageData, 0, 0);
 }
+
+function undo() {
+  if (historyIndex <= 0) return;
+  historyIndex--;
+  ctx.putImageData(history[historyIndex], 0, 0);
+}
+
+function redo() {
+  if (historyIndex >= history.length - 1) return;
+  historyIndex++;
+  ctx.putImageData(history[historyIndex], 0, 0);
+}
+
+document.addEventListener("keydown", (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key === "z" && !e.shiftKey) { e.preventDefault(); undo(); }
+  if ((e.ctrlKey || e.metaKey) && (e.key === "y" || (e.key === "z" && e.shiftKey))) { e.preventDefault(); redo(); }
+});
 
 function injectSaveControls() {
   const toolbar = clearBtn?.parentElement || document.body;
