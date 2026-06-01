@@ -791,3 +791,83 @@ button, a { font: inherit; }
   .footer-container { grid-template-columns: 1fr !important; }
   .footer-bottom { flex-direction: column !important; gap: 10px !important; }
 }
+
+
+.hero-stats{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:1rem;
+  margin-top:2rem;
+}
+
+.stat-card{
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.08);
+  backdrop-filter:blur(20px);
+  padding:1.2rem;
+  border-radius:18px;
+}
+
+.stat-card span{
+  display:block;
+  color:#9ca3af;
+  font-size:.85rem;
+}
+
+.stat-card strong{
+  display:block;
+  margin-top:.4rem;
+  font-size:1.4rem;
+}
+
+.component-card{
+  position:relative;
+  overflow:hidden;
+  border-radius:28px;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);
+  backdrop-filter:blur(20px);
+  transition:.4s ease;
+}
+
+.component-card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+  linear-gradient(
+      135deg,
+      rgba(123,97,255,.15),
+      rgba(235,104,53,.12)
+  );
+  opacity:0;
+  transition:.4s;
+}
+
+.component-card:hover{
+  transform:translateY(-8px);
+  box-shadow:
+  0 20px 60px rgba(0,0,0,.25);
+}
+
+.component-card:hover::before{
+  opacity:1;
+}
+
+.card-rank{
+  position:absolute;
+  top:16px;
+  right:16px;
+  width:44px;
+  height:44px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:linear-gradient(
+    135deg,
+    #7b61ff,
+    #eb6835
+  );
+  color:white;
+  font-weight:800;
+}
