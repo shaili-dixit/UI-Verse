@@ -1491,3 +1491,31 @@ body{
     font-size:13px;
   }
 }
+
+@media (max-width:768px){
+
+  .sidebar{
+    display:none;
+  }
+
+  .main{
+    margin-left:0;
+    width:100%;
+  }
+
+  .candidate-row{
+    grid-template-columns:1fr;
+    gap:.75rem;
+  }
+
+  .hero{
+    flex-direction:column;
+    text-align:center;
+  }
+
+  .topbar{
+    flex-direction:column;
+    gap:1rem;
+  }
+
+}
