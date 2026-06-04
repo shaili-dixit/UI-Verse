@@ -325,6 +325,37 @@ button, a { font: inherit; }
 }
 
 
+.component-search{
+  display:flex;
+  justify-content:center;
+  margin:2rem 0;
+}
+
+.component-search input{
+  width:min(500px,100%);
+  padding:1rem;
+  border-radius:16px;
+  border:none;
+  background:#ffffff10;
+  backdrop-filter:blur(12px);
+}
+.floating-breadcrumb{
+  padding:1rem 1.5rem;
+  border-radius:999px;
+  box-shadow:
+  0 20px 40px rgba(0,0,0,.15);
+}
+
+.component-card{
+  opacity:0;
+  transform:translateY(40px);
+  transition:.5s;
+}
+
+.component-card.show{
+  opacity:1;
+  transform:none;
+}
 .component-card {
   border: 1px solid var(--border);   /* default border */
   border-radius: 8px;                /* optional rounded corners */
