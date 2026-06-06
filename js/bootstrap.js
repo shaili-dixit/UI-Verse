@@ -42,6 +42,10 @@ const Bootstrap = {
       UIverse.register('ComponentVersioning', ComponentVersioning, dependenciesFor('ComponentVersioning'));
     }
 
+    if (typeof KeyboardContract !== 'undefined') {
+      UIverse.register('KeyboardContract', KeyboardContract, dependenciesFor('KeyboardContract'));
+    }
+
     if (typeof ComponentsRegistry !== 'undefined') {
       UIverse.register('ComponentsRegistry', ComponentsRegistry, dependenciesFor('ComponentsRegistry'));
     }
@@ -52,6 +56,14 @@ const Bootstrap = {
 
     if (typeof ComponentIndex !== 'undefined') {
       UIverse.register('ComponentIndex', ComponentIndex, dependenciesFor('ComponentIndex'));
+    }
+
+    if (typeof ComponentRecommendations !== 'undefined') {
+      UIverse.register('ComponentRecommendations', ComponentRecommendations, dependenciesFor('ComponentRecommendations'));
+    }
+
+    if (typeof RecommendationsUI !== 'undefined') {
+      UIverse.register('RecommendationsUI', RecommendationsUI, dependenciesFor('RecommendationsUI'), { domSelector: 'main.main-home' });
     }
 
     // Register feature modules (with optional conditional initialization)
